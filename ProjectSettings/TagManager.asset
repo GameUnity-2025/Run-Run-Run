@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Gem
+  - Trap
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Ground
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BackGround
+    uniqueID: 1980842567
+    locked: 0
+  - name: Ground
+    uniqueID: 1710325733
+    locked: 0
+  - name: ForeGround
+    uniqueID: 3894675903
+    locked: 0
+  - name: Player
+    uniqueID: 849561021
+    locked: 0
+  - name: Item
+    uniqueID: 424863969
+    locked: 0
+  - name: UI
+    uniqueID: 590852963
+    locked: 0
+  - name: Trap
+    uniqueID: 4233279087
+    locked: 0
+  m_RenderingLayers:
+  - Default
