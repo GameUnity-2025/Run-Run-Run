@@ -23,8 +23,11 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseScore(int points)
     {
-        score += points; 
-        UpdateScore();
+        if (!isGameOver)
+        {
+            score += points;
+            UpdateScore();
+        }
     }
     public void UpdateScore() { 
         scoreText.text = score.ToString();
