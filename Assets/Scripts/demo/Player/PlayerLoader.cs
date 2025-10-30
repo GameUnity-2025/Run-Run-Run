@@ -9,7 +9,7 @@ public class PlayerLoader : MonoBehaviour
 
     void Start()
     {
-        string selected = PlayerPrefs.GetString("SelectedCharacter", "Player");
+        string selected = PlayerPrefs.GetString("SelectedCharacter", "PlayerDefault");
 
         PlayerData chosen = allPlayers.Find(c => c.playerName == selected);
         if (chosen != null)

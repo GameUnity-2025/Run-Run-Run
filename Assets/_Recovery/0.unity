@@ -816,17 +816,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 48
-    m_Right: 48
-    m_Top: 40
-    m_Bottom: 24
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 320, y: 140}
-  m_Spacing: {x: 24, y: 24}
-  m_Constraint: 1
-  m_ConstraintCount: 3
+  m_CellSize: {x: 200, y: 80}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1924335826
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,22 +897,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1852114076}
     m_Modifications:
-    - target: {fileID: 1293278353725696423, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 290.71
-      objectReference: {fileID: 0}
-    - target: {fileID: 1293278353725696423, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 82.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1293278353725696423, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -441.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1293278353725696423, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 219.14
-      objectReference: {fileID: 0}
     - target: {fileID: 2950433601997562601, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
       propertyPath: m_text
       value: Select
@@ -924,22 +908,6 @@ PrefabInstance:
     - target: {fileID: 6715621514856630387, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
       propertyPath: m_Name
       value: PlayerButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 7419631302377703091, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_fontSize
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 7419631302377703091, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 7419631302377703091, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 512
-      objectReference: {fileID: 0}
-    - target: {fileID: 7419631302377703091, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8539749890799098555, guid: 08c14d86af0cc9c48b630f3d1c1de410, type: 3}
       propertyPath: m_Pivot.x

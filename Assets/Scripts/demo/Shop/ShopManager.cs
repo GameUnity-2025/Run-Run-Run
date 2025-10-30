@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // nếu bạn dùng TextMeshPro
+using TMPro;
+using System.Diagnostics;
 
 public class ShopManager : MonoBehaviour
 {
-    public PlayerData[] players; // danh sách nhân vật
-    public GameObject playerButtonPrefab; // prefab nút mua/chọn
-    public Transform buttonContainer; // nơi chứa các nút
+    [Header("Shop Settings")]
+    public PlayerData[] players;                  // Danh sách nhân vật
+    public GameObject playerButtonPrefab;         // Prefab nút chọn nhân vật
+    public Transform buttonContainer;             // Nơi chứa các nút
 
     private void Start()
     {
@@ -15,36 +17,44 @@ public class ShopManager : MonoBehaviour
 
     void LoadShop()
     {
+        // Xóa nút cũ trước khi tạo lại
         foreach (Transform child in buttonContainer)
             Destroy(child.gameObject);
 
+        // Tạo nút mới cho từng nhân vật
         foreach (PlayerData player in players)
         {
             GameObject btn = Instantiate(playerButtonPrefab, buttonContainer);
-            btn.transform.Find("CharacterName").GetComponent<TextMeshProUGUI>().text = player.playerName;
 
-            Button buyButton = btn.transform.Find("BuyButton").GetComponent<Button>();
-            Button selectButton = btn.transform.Find("SelectButton").GetComponent<Button>();
+            // Gán tên nhân vật lên Text
+            var nameText = btn.transform.Find("CharacterName")?.GetComponent<TextMeshProUGUI>();
+            if (nameText != null)
+                nameText.text = player.playerName;
 
-            buyButton.gameObject.SetActive(!player.isPurchased);
-            selectButton.gameObject.SetActive(player.isPurchased);
+            // Gắn sự kiện khi nhấn nút "Select" (xử lý cả trường hợp prefab đặt tên "SellectButton")
+            Button selectButton = btn.transform.Find("SelectButton")?.GetComponent<Button>();
+            if (selectButton == null)
+                selectButton = btn.transform.Find("SellectButton")?.GetComponent<Button>();
+            if (selectButton == null)
+                selectButton = btn.GetComponentInChildren<Button>();
 
-            buyButton.onClick.AddListener(() => BuyPlayer(player));
-            selectButton.onClick.AddListener(() => SelectPlayer(player));
+            if (selectButton != null)
+            {
+                var selectedPlayer = player; // tránh vấn đề capture biến trong vòng lặp
+                selectButton.onClick.AddListener(() => SelectPlayer(selectedPlayer));
+            }
+            else
+            {
+                UnityEngine.Debug.LogWarning("ShopManager: Không tìm thấy Button chọn trong prefab.");
+            }
         }
     }
 
-    void BuyPlayer(PlayerData player)
+    public void SelectPlayer(PlayerData player)
     {
-        // ở đây bạn có thể trừ tiền, hoặc đơn giản set isPurchased = true
-        player.isPurchased = true;
-        PlayerPrefs.SetInt(player.playerName + "_purchased", 1);
-        LoadShop();
-    }
-
-    void SelectPlayer(PlayerData player)
-    {
+        // Lưu tên nhân vật đã chọn
         PlayerPrefs.SetString("SelectedCharacter", player.playerName);
-        Debug.Log("Selected: " + player.playerName);
+        PlayerPrefs.Save();
+        UnityEngine.Debug.Log("Selected: " + player.playerName);
     }
 }
