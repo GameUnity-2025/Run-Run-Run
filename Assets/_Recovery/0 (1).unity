@@ -4878,28 +4878,18 @@ MonoBehaviour:
   - playerName: PlayerDefault
     characterSprite: {fileID: 8327456709618745999, guid: cf8a1838c207bb444a9ccfcd26d52fc3, type: 3}
     characterPrefab: {fileID: 4271607094797026217}
-    price: 0
-    isDefault: 0
   - playerName: PlayerGreen
     characterSprite: {fileID: 1499567985400848262, guid: 7ce7569669e223c4ebf069830f2f8958, type: 3}
     characterPrefab: {fileID: 6830639705897900506}
-    price: 0
-    isDefault: 0
   - playerName: PlayerPink
     characterSprite: {fileID: -1299002456533753899, guid: 64613a0477932984e9ad7b9efa6b94f5, type: 3}
     characterPrefab: {fileID: 8895756343808959264}
-    price: 0
-    isDefault: 0
   - playerName: PlayerPurple
     characterSprite: {fileID: 5416524585157233970, guid: c7aa88342e132a04d9941ff35b152bb6, type: 3}
     characterPrefab: {fileID: 7745631149976478193}
-    price: 0
-    isDefault: 0
   - playerName: PlayerYellow
     characterSprite: {fileID: -8455583299059481146, guid: 1e0f929b3bfba6d448ad5249b5c73d64, type: 3}
     characterPrefab: {fileID: 1665880327223113118}
-    price: 0
-    isDefault: 0
   spawnPoint: {fileID: 1315024570}
   dontDestroyOnLoad: 0
   parentUnderSpawnPoint: 1
