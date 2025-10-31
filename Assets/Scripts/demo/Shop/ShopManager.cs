@@ -80,7 +80,7 @@ public class ShopManager : MonoBehaviour
 				{
 					selectButton.interactable = true;
 					selectButton.onClick.AddListener(() => TryBuy(selectedPlayer));
-					if (btnText != null) btnText.text = "Buy 10 gems";
+					if (btnText != null) btnText.text = "Buy";
 				}
 			}
 			else
