@@ -9,7 +9,6 @@ TagManager:
   - Ground
   - Enemy
   - Goal
-  - SpringPad
   layers:
   - Default
   - TransparentFX
