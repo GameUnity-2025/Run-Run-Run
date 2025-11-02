@@ -12,7 +12,8 @@ public class PlayerCollision : MonoBehaviour
         if (collision.CompareTag("Gem"))
         {
             Destroy(collision.gameObject);
-            gameManager.AddScore(1);
+			gameManager.AddScore(1);
+			GemsManager.AddGems(1);
         }
         else if (collision.CompareTag("Trap"))
         {
