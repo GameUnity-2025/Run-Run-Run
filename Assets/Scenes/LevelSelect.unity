@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ac1f3d123d417f40b11b1974982ebcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoToScene
-  SceneName: Level3
+  SceneName: Level5
 --- !u!114 &11226274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1488,7 +1488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ac1f3d123d417f40b11b1974982ebcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoToScene
-  SceneName: Level3
+  SceneName: Level4
 --- !u!114 &1837035292
 MonoBehaviour:
   m_ObjectHideFlags: 0
