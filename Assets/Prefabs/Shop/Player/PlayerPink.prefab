@@ -238,7 +238,7 @@ MonoBehaviour:
   defaultSprite: {fileID: -1299002456533753899, guid: 64613a0477932984e9ad7b9efa6b94f5, type: 3}
   allPlayers:
   - playerName: PlayerDefault
-    characterSprite: {fileID: 0}
+    characterSprite: {fileID: 8327456709618745999, guid: cf8a1838c207bb444a9ccfcd26d52fc3, type: 3}
     characterPrefab: {fileID: 2604349007224177920, guid: 50bdb5f90993fca45b97b798f64648c8, type: 3}
     price: 0
     isDefault: 0
