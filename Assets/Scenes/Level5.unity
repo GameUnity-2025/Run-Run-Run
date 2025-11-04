@@ -2622,7 +2622,7 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 80
-      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf000000000000000000000000000000000000000000000000000000000000000000000000
+      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf00000000000000000000803f0000803f0000803f00000000000000000000803f00000000
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
@@ -3062,7 +3062,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1110211086}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -5045,7 +5045,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileSpriteIndex: 6
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6664,12 +6664,12 @@ Tilemap:
     m_Data: {fileID: 1570698742127296960, guid: 345c6ac51e05e834e90ba69b257c4dd0, type: 3}
   - m_RefCount: 2
     m_Data: {fileID: -7057455364940264851, guid: 9a5172e5c43a73544bf4e2fadaf8bfb7, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 8580536678407168306, guid: 503cd8e5864648746920685706ed839a, type: 3}
-  - m_RefCount: 54
-    m_Data: {fileID: 9179172765007742821, guid: c97fb9be8cb1c58489e2c7485bdefe83, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 54
+    m_Data: {fileID: 9179172765007742821, guid: c97fb9be8cb1c58489e2c7485bdefe83, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 8580536678407168306, guid: 503cd8e5864648746920685706ed839a, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 301
     m_Data:
