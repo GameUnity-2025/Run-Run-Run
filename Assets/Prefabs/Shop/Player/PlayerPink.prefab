@@ -236,7 +236,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   spriteRenderer: {fileID: 2018023809272012455}
   defaultSprite: {fileID: -1299002456533753899, guid: 64613a0477932984e9ad7b9efa6b94f5, type: 3}
-  allPlayers: []
+  allPlayers:
+  - playerName: PlayerDefault
+    characterSprite: {fileID: 8327456709618745999, guid: cf8a1838c207bb444a9ccfcd26d52fc3, type: 3}
+    characterPrefab: {fileID: 2604349007224177920, guid: 50bdb5f90993fca45b97b798f64648c8, type: 3}
+    price: 0
+    isDefault: 0
+  - playerName: PlayerGreen
+    characterSprite: {fileID: 8327456709618745999, guid: cf8a1838c207bb444a9ccfcd26d52fc3, type: 3}
+    characterPrefab: {fileID: 3038745636358158495, guid: 03e5ab617f8e2fd46bbecabf746324bc, type: 3}
+    price: 0
+    isDefault: 0
+  - playerName: PlayerPink
+    characterSprite: {fileID: -1299002456533753899, guid: 64613a0477932984e9ad7b9efa6b94f5, type: 3}
+    characterPrefab: {fileID: 1444606009337168443}
+    price: 0
+    isDefault: 0
+  - playerName: PlayerPurple
+    characterSprite: {fileID: 5416524585157233970, guid: c7aa88342e132a04d9941ff35b152bb6, type: 3}
+    characterPrefab: {fileID: 9000643373778977954, guid: e95aeb286c737e54a9d7e835f8bb77e5, type: 3}
+    price: 0
+    isDefault: 0
+  - playerName: PlayerYellow
+    characterSprite: {fileID: -8455583299059481146, guid: 1e0f929b3bfba6d448ad5249b5c73d64, type: 3}
+    characterPrefab: {fileID: 8622645292198596312, guid: 50c4113f95e0b1f44967c1b4cfdf29cd, type: 3}
+    price: 0
+    isDefault: 0
 --- !u!1 &4348313334674318354
 GameObject:
   m_ObjectHideFlags: 0
