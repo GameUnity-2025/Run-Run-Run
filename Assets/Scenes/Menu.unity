@@ -862,6 +862,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1222660259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1222660261}
+  - component: {fileID: 1222660260}
+  m_Layer: 0
+  m_Name: SceneLoad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1222660260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222660259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac1f3d123d417f40b11b1974982ebcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoToScene
+  SceneName: LevelSelect
+--- !u!4 &1222660261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222660259}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 736.5069, y: 616.4642, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620887637
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +941,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.3929, y: 13.0883}
+  m_AnchoredPosition: {x: 15, y: 116}
   m_SizeDelta: {x: 604.9292, y: 259.5737}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1620887639
@@ -1442,7 +1487,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1987478410}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1476,14 +1521,14 @@ PrefabInstance:
     - target: {fileID: 228906757236561920, guid: ccdfcc63a6a2ed74aacec673c95f64ec, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 196812261}
+      objectReference: {fileID: 1222660260}
     - target: {fileID: 228906757236561920, guid: ccdfcc63a6a2ed74aacec673c95f64ec, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Play
+      value: LoadScene
       objectReference: {fileID: 0}
     - target: {fileID: 228906757236561920, guid: ccdfcc63a6a2ed74aacec673c95f64ec, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainMenu, Assembly-CSharp
+      value: GoToScene, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 228906757236561920, guid: ccdfcc63a6a2ed74aacec673c95f64ec, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1597,3 +1642,4 @@ SceneRoots:
   - {fileID: 1925995394}
   - {fileID: 1824868934}
   - {fileID: 1179221580}
+  - {fileID: 1222660261}
