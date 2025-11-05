@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
@@ -80,7 +80,12 @@ public class GameManager : MonoBehaviour
         score = 0;
         UpdateScoreUI();
         Time.timeScale = 1;
-        SceneManager.LoadScene("Game");
+
+        // Lấy scene hiện tại
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        // Load lại đúng scene đó
+        SceneManager.LoadScene(currentScene);
     }
 
     public bool IsGameOver()
