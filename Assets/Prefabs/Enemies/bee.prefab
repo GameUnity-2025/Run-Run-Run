@@ -175,3 +175,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyVerticalMovement
   speed: 3
   distance: 2
+  enemySoundClip: {fileID: 8300000, guid: d3789e83886d08f45944ad2d7c18cfd5, type: 3}
+  footstepInterval: 0.5
+  useIndividualAudioSource: 1
+  soundVolume: 0.2
+  minDistance: 1
+  maxDistance: 5
+  spatialBlend: 0.75

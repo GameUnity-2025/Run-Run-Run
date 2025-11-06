@@ -45,6 +45,9 @@ public class EnemyVertical : MonoBehaviour
         {
             animator.SetBool("isJumping", true);
         }
+        
+        // Âm thanh được điều khiển bởi EnemySoundController component (nếu có)
+        // Không cần làm gì ở đây
     }
 
     private IEnumerator JumpRoutine()
@@ -74,6 +77,9 @@ public class EnemyVertical : MonoBehaviour
         rb.AddForce(jumpDirection * new Vector2(horizontalForce, jumpForce), ForceMode2D.Impulse);
 
         animator.SetBool("isJumping", true);
+
+        // Âm thanh được điều khiển bởi EnemySoundController component
+        // Không cần phát ở đây nữa - EnemySoundController sẽ tự động phát khi player gần
     }
 
     private void OnDrawGizmosSelected()

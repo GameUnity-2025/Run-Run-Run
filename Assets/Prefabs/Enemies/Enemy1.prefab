@@ -129,6 +129,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   speed: 2
   distance: 3
+  enemySoundClip: {fileID: 8300000, guid: 5f0532c421636054883a8ccbf03cc146, type: 3}
+  footstepInterval: 0.5
+  useIndividualAudioSource: 1
+  soundVolume: 0.2
+  minDistance: 1
+  maxDistance: 5
+  spatialBlend: 0.75
 --- !u!61 &3189618573009295818
 BoxCollider2D:
   m_ObjectHideFlags: 0

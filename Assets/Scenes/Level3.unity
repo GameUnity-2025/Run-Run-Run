@@ -10452,6 +10452,61 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8115190770123032460, guid: b0dc6220dd17c594cb281c81aee6ede3, type: 3}
   m_PrefabInstance: {fileID: 893764734}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &908003788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 908003790}
+  - component: {fileID: 908003789}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &908003789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908003788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b789b2a7d1626408abd0187a58d173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundManager
+  playerFootstepSound: {fileID: 8300000, guid: 7c52233ffba53214997745702925edaf, type: 3}
+  playerJumpSound: {fileID: 8300000, guid: 394afc87723d4094a9ef9d607e5214dc, type: 3}
+  gemCollectSound: {fileID: 8300000, guid: 6f218596338729f44925a22e6995e22a, type: 3}
+  waterSplashSound: {fileID: 8300000, guid: e83034a4afefd644394d1b9af042d539, type: 3}
+  waterAmbientSound: {fileID: 8300000, guid: 31f70f2622315c949956bab7d8802019, type: 3}
+  sfxSource: {fileID: 0}
+  musicSource: {fileID: 0}
+  ambientSource: {fileID: 0}
+  sfxVolume: 1
+  musicVolume: 1
+  defaultSFXVolume: 0.5
+--- !u!4 &908003790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908003788}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 85.9025, y: 2.46588, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &910337070
 GameObject:
   m_ObjectHideFlags: 0
@@ -32478,3 +32533,4 @@ SceneRoots:
   - {fileID: 1063614711}
   - {fileID: 1195036272}
   - {fileID: 1106689635}
+  - {fileID: 908003790}

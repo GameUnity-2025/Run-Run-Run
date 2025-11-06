@@ -21,12 +21,24 @@ public class PlayerController : MonoBehaviour
     private bool canMove = true; // 🔒 Khóa điều khiển khi GameOver
     private bool facingRight = true; // 🔄 Lưu hướng hiện tại của player
 
+    [Header("Sound Settings")]
+    [SerializeField] private float footstepInterval = 0.3f; // Khoảng thời gian giữa các bước chân
+    private float footstepTimer = 0f;
+    private bool wasMoving = false;
+    private AudioSource footstepAudioSource; // AudioSource riêng cho footstep sound
+
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         startPosition = transform.position;
         gameManager = FindFirstObjectByType<GameManager>();
+        
+        // Tạo AudioSource riêng cho footstep sound
+        footstepAudioSource = gameObject.AddComponent<AudioSource>();
+        footstepAudioSource.playOnAwake = false;
+        footstepAudioSource.loop = false;
+        footstepAudioSource.spatialBlend = 0f; // 2D sound
     }
 
     void LateUpdate()
@@ -41,6 +53,7 @@ public class PlayerController : MonoBehaviour
         if (!canMove || gameManager.IsGameOver() || gameManager.IsGameWon())
         {
             rb.linearVelocity = Vector2.zero;
+            HandleFootstepSound(false); // Dừng âm thanh khi game over
             UpdateAnimation();
             return;
         }
@@ -48,6 +61,11 @@ public class PlayerController : MonoBehaviour
         // Di chuyển trái phải
         float move = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
+
+        // Kiểm tra vận tốc thực tế để phát âm thanh bước chân
+        // Chỉ phát khi nhân vật thực sự di chuyển trên mặt đất
+        bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f && isGrounded;
+        HandleFootstepSound(isMoving);
 
         // ⚡ Quay đầu theo hướng di chuyển
         if (move > 0 && !facingRight)
@@ -108,6 +126,72 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isGrounded = false;
+            
+            // Phát âm thanh nhảy
+            PlayJumpSound();
+        }
+    }
+
+    private void HandleFootstepSound(bool isMoving)
+    {
+        // Chỉ phát âm thanh khi nhân vật đang di chuyển thực sự
+        if (isMoving)
+        {
+            // Phát âm thanh ngay khi bắt đầu di chuyển
+            if (!wasMoving)
+            {
+                footstepTimer = 0f; // Reset timer khi bắt đầu di chuyển
+                PlayFootstepSound(); // Phát âm thanh ngay lập tức
+            }
+            
+            // Tiếp tục phát âm thanh theo interval
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= footstepInterval)
+            {
+                PlayFootstepSound();
+                footstepTimer = 0f;
+            }
+            wasMoving = true;
+        }
+        else
+        {
+            // Dừng đếm thời gian và dừng âm thanh khi không di chuyển
+            footstepTimer = 0f;
+            wasMoving = false;
+            
+            // Dừng âm thanh footstep ngay lập tức khi dừng di chuyển
+            StopFootstepSound();
+        }
+    }
+
+    private void PlayFootstepSound()
+    {
+        if (footstepAudioSource != null && SoundManager.Instance != null && SoundManager.Instance.playerFootstepSound != null)
+        {
+            // Chỉ phát nếu chưa đang phát hoặc đã phát xong
+            if (!footstepAudioSource.isPlaying)
+            {
+                footstepAudioSource.clip = SoundManager.Instance.playerFootstepSound;
+                footstepAudioSource.volume = SoundManager.Instance.defaultSFXVolume * SoundManager.Instance.sfxVolume;
+                footstepAudioSource.Play();
+            }
+        }
+    }
+
+    private void StopFootstepSound()
+    {
+        // Dừng âm thanh footstep ngay lập tức
+        if (footstepAudioSource != null && footstepAudioSource.isPlaying)
+        {
+            footstepAudioSource.Stop();
+        }
+    }
+
+    private void PlayJumpSound()
+    {
+        if (SoundManager.Instance != null && SoundManager.Instance.playerJumpSound != null)
+        {
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.playerJumpSound, SoundManager.Instance.defaultSFXVolume);
         }
     }
 
