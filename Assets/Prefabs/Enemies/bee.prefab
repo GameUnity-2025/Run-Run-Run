@@ -173,12 +173,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3532a890ea8676346917329b17131694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyVerticalMovement
-  speed: 3
-  distance: 2
+  speed: 2
+  distance: 3
   enemySoundClip: {fileID: 8300000, guid: d3789e83886d08f45944ad2d7c18cfd5, type: 3}
   footstepInterval: 0.5
   useIndividualAudioSource: 1
-  soundVolume: 0.2
+  soundVolume: 1
+  enableAutoLoopAudio: 1
+  alwaysTrackClosestPlayer: 1
   minDistance: 1
   maxDistance: 5
+  distanceHysteresis: 1
   spatialBlend: 0.75
+  playerTag: Player
+  playerTransform: {fileID: 0}
+  moveSFX: {fileID: 0}

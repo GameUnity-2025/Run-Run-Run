@@ -186,6 +186,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   animator: {fileID: 7519542151445594810}
+  frogJumpClip: {fileID: 8300000, guid: 446ddfff6e7fd3545ad77fa9d6e67fac, type: 3}
 --- !u!50 &3583481032170029309
 Rigidbody2D:
   serializedVersion: 5
@@ -271,11 +272,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fdcb11c75312b44b03b1689d0bab79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySoundController
-  enemySoundClip: {fileID: 8300000, guid: 446ddfff6e7fd3545ad77fa9d6e67fac, type: 3}
   soundVolume: 0.5
   minDistance: 1
-  maxDistance: 8
-  spatialBlend: 0.75
+  maxDistance: 5
+  spatialBlend: 1
+  continuousLoop: 0
+  playerTag: Player
+  playerTransform: {fileID: 0}
 --- !u!1 &5015418506954458155
 GameObject:
   m_ObjectHideFlags: 0

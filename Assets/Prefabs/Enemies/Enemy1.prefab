@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4906457150258924027}
   - component: {fileID: 3440617364850141530}
   - component: {fileID: 7125388487816314533}
-  - component: {fileID: 3829458980882117472}
   - component: {fileID: 3189618573009295818}
+  - component: {fileID: -4271853060228228031}
   m_Layer: 7
   m_Name: Enemy1
   m_TagString: Enemy
@@ -115,27 +115,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3829458980882117472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8570469076608400116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1ab5461a09b10341a1c2190cb4154ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  speed: 2
-  distance: 3
-  enemySoundClip: {fileID: 8300000, guid: 5f0532c421636054883a8ccbf03cc146, type: 3}
-  footstepInterval: 0.5
-  useIndividualAudioSource: 1
-  soundVolume: 0.2
-  minDistance: 1
-  maxDistance: 5
-  spatialBlend: 0.75
 --- !u!61 &3189618573009295818
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -182,3 +161,30 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 0.8420371}
   m_EdgeRadius: 0
+--- !u!114 &-4271853060228228031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8570469076608400116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ab5461a09b10341a1c2190cb4154ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHorizontal
+  speed: 2
+  distance: 3
+  enemySoundClip: {fileID: 8300000, guid: 5f0532c421636054883a8ccbf03cc146, type: 3}
+  footstepInterval: 0.5
+  useIndividualAudioSource: 1
+  soundVolume: 0.2
+  enableAutoLoopAudio: 1
+  alwaysTrackClosestPlayer: 1
+  minDistance: 1
+  maxDistance: 5
+  distanceHysteresis: 0.5
+  spatialBlend: 0.75
+  playerTag: Player
+  playerTransform: {fileID: 0}
+  moveSFX: {fileID: 0}

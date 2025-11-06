@@ -7,7 +7,6 @@ using UnityEngine;
 public class EnemySoundController : MonoBehaviour
 {
     [Header("Sound Settings")]
-    public AudioClip enemySoundClip; // Gán trực tiếp AudioClip vào đây
     [Range(0f, 1f)]
     [SerializeField] private float soundVolume = 0.5f;
     
@@ -15,19 +14,30 @@ public class EnemySoundController : MonoBehaviour
     [Tooltip("Khoảng cách tối thiểu để nghe âm thanh ở mức đầy đủ")]
     [SerializeField] private float minDistance = 1f;
     [Tooltip("Khoảng cách tối đa để nghe được âm thanh (beyond này sẽ không nghe thấy)")]
-    [SerializeField] private float maxDistance = 8f;
+    [SerializeField] private float maxDistance = 3f;
     [Tooltip("Độ 3D của âm thanh (0 = 2D, 1 = 3D thuần)")]
     [Range(0f, 1f)]
     [SerializeField] private float spatialBlend = 0.75f;
+    [Header("Behavior")]
+    [Tooltip("Bật để phát liên tục khi player ở gần. Tắt để chỉ phát theo lệnh (ví dụ Frog Jump)")]
+    [SerializeField] private bool continuousLoop = true;
     
     private AudioSource audioSource;
-    private Transform playerTransform;
+    [Header("Player Reference")]
+    [Tooltip("Tag của Player để dò tìm. Mặc định là 'Player'.")]
+    [SerializeField] private string playerTag = "Player";
+    [Tooltip("Có thể gán trực tiếp Transform Player tại đây để bỏ qua tìm kiếm bằng tag.")]
+    [SerializeField] private Transform playerTransform;
     private bool isPlayingSound = false;
     
     private void Start()
     {
         // Tìm player
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = null;
+        if (playerTransform == null && !string.IsNullOrEmpty(playerTag))
+        {
+            player = GameObject.FindGameObjectWithTag(playerTag);
+        }
         if (player != null)
         {
             playerTransform = player.transform;
@@ -58,15 +68,14 @@ public class EnemySoundController : MonoBehaviour
         audioSource.mute = false;
         audioSource.outputAudioMixerGroup = null;
         
-        if (enemySoundClip != null)
-        {
-            audioSource.clip = enemySoundClip;
-        }
+        // Không gán clip ở đây nữa - dùng Animator Events để truyền clip vào
     }
     
     private void Update()
     {
-        if (playerTransform == null || audioSource == null || enemySoundClip == null)
+        if (!continuousLoop) return;
+
+        if (playerTransform == null || audioSource == null)
             return;
         
         // Tính khoảng cách đến player
@@ -78,7 +87,11 @@ public class EnemySoundController : MonoBehaviour
             // Nếu chưa đang phát, bắt đầu phát
             if (!isPlayingSound)
             {
-                StartPlayingSound();
+                // Nếu không có clip sẵn, chờ Animator Event gọi StartLoop
+                if (audioSource.clip != null)
+                {
+                    StartPlayingSound();
+                }
             }
         }
         else
@@ -93,7 +106,7 @@ public class EnemySoundController : MonoBehaviour
     
     private void StartPlayingSound()
     {
-        if (audioSource == null || enemySoundClip == null)
+        if (audioSource == null || audioSource.clip == null)
             return;
         
         // Tính volume với SFX volume từ SoundManager nếu có
@@ -103,7 +116,6 @@ public class EnemySoundController : MonoBehaviour
             finalVolume = soundVolume * SoundManager.Instance.sfxVolume;
         }
         
-        audioSource.clip = enemySoundClip;
         audioSource.volume = finalVolume;
         audioSource.loop = true;
         audioSource.spatialBlend = spatialBlend;
@@ -115,7 +127,7 @@ public class EnemySoundController : MonoBehaviour
         audioSource.Play();
         isPlayingSound = true;
         
-        Debug.Log($"[{gameObject.name}] 🔊 Started playing sound: {enemySoundClip.name} | Volume: {finalVolume}");
+        Debug.Log($"[{gameObject.name}] 🔊 Started playing sound: {audioSource.clip?.name} | Volume: {finalVolume}");
     }
     
     private void StopPlayingSound()
@@ -128,5 +140,38 @@ public class EnemySoundController : MonoBehaviour
         
         Debug.Log($"[{gameObject.name}] 🔇 Stopped playing sound (player is far)");
     }
+
+    public void PlayOneShot3D(AudioClip clip)
+    {
+        if (audioSource == null || clip == null) return;
+        // cấu hình 3D theo mặc định hiện tại
+        audioSource.playOnAwake = false;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.spatialBlend = spatialBlend;
+        audioSource.minDistance = minDistance;
+        audioSource.maxDistance = maxDistance;
+        audioSource.loop = false;
+
+        float finalVolume = soundVolume;
+        if (SoundManager.Instance != null)
+        {
+            finalVolume = soundVolume * SoundManager.Instance.sfxVolume;
+        }
+        audioSource.PlayOneShot(clip, finalVolume);
+    }
+
+    // === Animator-driven API ===
+    public void StartLoop(AudioClip clip)
+    {
+        if (audioSource == null || clip == null) return;
+        audioSource.clip = clip;
+        StartPlayingSound();
+    }
+
+    public void StopLoop()
+    {
+        StopPlayingSound();
+    }
 }
+
 

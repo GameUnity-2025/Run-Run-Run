@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 1823128648817077949}
   - component: {fileID: 8784800665476382340}
   - component: {fileID: 8241030713539976419}
+  - component: {fileID: 3319011093705835593}
   m_Layer: 0
   m_Name: PlayerYellow
   m_TagString: Player
@@ -242,6 +243,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheck: {fileID: 6006307668002124471}
+  footstepInterval: 0.3
 --- !u!114 &1823128648817077949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,3 +310,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOutOfViewKill
   extraMargin: 1
   onlyBelow: 1
+--- !u!81 &3319011093705835593
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622645292198596312}
+  m_Enabled: 1

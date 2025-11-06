@@ -19,11 +19,17 @@ public abstract class BaseEnemyMovement : MonoBehaviour
     [SerializeField] protected bool useIndividualAudioSource = true; // Mỗi enemy có AudioSource riêng
     [Range(0f, 1f)]
     [SerializeField] protected float soundVolume = 0.5f; // Volume cho âm thanh này (có thể điều chỉnh riêng cho từng enemy)
+    [Tooltip("Bật để BaseEnemyMovement tự phát loop theo khoảng cách. Tắt để dùng Animator/EnemySoundController (như Frog).")]
+    [SerializeField] protected bool enableAutoLoopAudio = true;
+    [Tooltip("Luôn bám theo Player gần nhất có tag chỉ định để tránh trỏ nhầm SpawnPoint/placeholder.")]
+    [SerializeField] private bool alwaysTrackClosestPlayer = true;
     [Header("3D Sound Settings")]
     [Tooltip("Khoảng cách tối thiểu để nghe âm thanh ở mức đầy đủ")]
     [SerializeField] protected float minDistance = 1f; // Khoảng cách tối thiểu
     [Tooltip("Khoảng cách tối đa để nghe được âm thanh (beyond này sẽ không nghe thấy)")]
-    [SerializeField] protected float maxDistance = 8f; // Khoảng cách tối đa (tăng lên để vẫn nghe được)
+    [SerializeField] protected float maxDistance = 3f; // Khoảng cách tối đa
+    [Tooltip("Biên độ trễ dừng âm (hysteresis) để tránh ngắt-quãng khi đứng ở rìa phạm vi nghe")]
+    [SerializeField] protected float distanceHysteresis = 0.5f;
     [Tooltip("Độ 3D của âm thanh (0 = 2D, 1 = 3D thuần). Giá trị 0.7-0.8 là tốt để có khoảng cách nhưng vẫn nghe được")]
     [Range(0f, 1f)]
     [SerializeField] protected float spatialBlend = 0.75f; // Mix 2D/3D (0.75 = chủ yếu 3D nhưng vẫn nghe được từ xa)
@@ -46,14 +52,22 @@ public abstract class BaseEnemyMovement : MonoBehaviour
     protected bool isPlayingSound = false; // Theo dõi xem có đang phát âm thanh không
 
     protected Vector3 initialPosition;
-    protected Transform playerTransform; // Transform của player để kiểm tra khoảng cách
+    [Header("Player Reference")]
+    [Tooltip("Tag của Player để dò tìm. Mặc định là 'Player'.")]
+    [SerializeField] private string playerTag = "Player";
+    [Tooltip("Có thể gán trực tiếp Transform Player tại đây để bỏ qua tìm kiếm bằng tag.")]
+    [SerializeField] protected Transform playerTransform; // Transform của player để kiểm tra khoảng cách
 
     protected virtual void Start()
     {
         initialPosition = transform.position;
         
         // Tìm player trong scene
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = null;
+        if (playerTransform == null && !string.IsNullOrEmpty(playerTag))
+        {
+            player = GameObject.FindGameObjectWithTag(playerTag);
+        }
         if (player != null)
         {
             playerTransform = player.transform;
@@ -70,14 +84,17 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         
         Debug.Log($"[{gameObject.name}] BaseEnemyMovement.Start() called | useIndividualAudioSource: {useIndividualAudioSource} | Player found: {(playerTransform != null ? "Yes" : "No")}");
         
-        // Kiểm tra và cảnh báo nếu enemySoundClip chưa được gán
-        if (enemySoundClip == null)
+        // Nếu dùng auto loop, kiểm tra clip; nếu không thì bỏ qua cảnh báo
+        if (enableAutoLoopAudio)
         {
-            Debug.LogError($"[{gameObject.name}] ❌ CRITICAL: EnemySoundClip is NULL! Please assign AudioClip in Inspector on the BaseEnemyMovement component.");
-        }
-        else
-        {
-            Debug.Log($"[{gameObject.name}] ✓ EnemySoundClip assigned: {enemySoundClip.name}");
+            if (enemySoundClip == null)
+            {
+                Debug.LogError($"[{gameObject.name}] ❌ CRITICAL: EnemySoundClip is NULL! Please assign AudioClip in Inspector on the BaseEnemyMovement component.");
+            }
+            else
+            {
+                Debug.Log($"[{gameObject.name}] ✓ EnemySoundClip assigned: {enemySoundClip.name}");
+            }
         }
         
         // Tạo AudioSource riêng cho enemy này để tránh trùng âm thanh
@@ -98,8 +115,8 @@ public abstract class BaseEnemyMovement : MonoBehaviour
             // Cấu hình AudioSource - ĐẢM BẢO CẤU HÌNH ĐÚNG
             ConfigureAudioSource();
             
-            // Gán clip và chuẩn bị phát (sẽ phát khi enemy bắt đầu di chuyển)
-            if (enemySoundClip != null)
+            // Gán clip nếu dùng auto loop
+            if (enableAutoLoopAudio && enemySoundClip != null)
             {
                 enemyAudioSource.clip = enemySoundClip;
             }
@@ -125,12 +142,13 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         
         enemyAudioSource.playOnAwake = false;
         enemyAudioSource.loop = true; // LOOP để âm thanh phát liên tục không bị ngắt
-        enemyAudioSource.spatialBlend = spatialBlend; // Sử dụng giá trị từ Inspector (mặc định 0.75f)
+        enemyAudioSource.spatialBlend = spatialBlend; // Sử dụng giá trị từ Inspector
         enemyAudioSource.rolloffMode = AudioRolloffMode.Linear;
-        enemyAudioSource.minDistance = minDistance; // Sử dụng giá trị từ Inspector
-        enemyAudioSource.maxDistance = maxDistance; // Sử dụng giá trị từ Inspector (mặc định 8f)
+        enemyAudioSource.minDistance = minDistance; // 1f
+        enemyAudioSource.maxDistance = maxDistance; // 3f
+        enemyAudioSource.dopplerLevel = 0f; // tránh méo tiếng khi di chuyển
         enemyAudioSource.mute = false; // Đảm bảo không bị mute
-        enemyAudioSource.volume = 1f; // Set volume mặc định (sẽ được nhân với soundVolume khi phát)
+        enemyAudioSource.volume = 1f; // Sẽ nhân với soundVolume khi phát
         enemyAudioSource.outputAudioMixerGroup = null; // Đảm bảo không bị mute bởi mixer
         enemyAudioSource.bypassEffects = false;
         enemyAudioSource.bypassListenerEffects = false;
@@ -141,8 +159,11 @@ public abstract class BaseEnemyMovement : MonoBehaviour
     {
         Move(); // gọi hàm abstract mà class con sẽ cài đặt
         
-        // Kiểm tra khoảng cách với player và điều khiển âm thanh
-        CheckPlayerDistanceAndControlSound();
+        // Nếu auto loop bật, kiểm tra khoảng cách và điều khiển âm thanh
+        if (enableAutoLoopAudio)
+        {
+            CheckPlayerDistanceAndControlSound();
+        }
     }
     
     /// <summary>
@@ -154,24 +175,10 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         if (enemyAudioSource == null || enemySoundClip == null)
             return;
         
-        // Nếu không có player, tìm lại
-        if (playerTransform == null)
+        // Nếu luôn theo dõi player gần nhất hoặc chưa có player, tìm lại
+        if (alwaysTrackClosestPlayer || playerTransform == null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                playerTransform = player.transform;
-                Debug.Log($"[{gameObject.name}] Found player: {player.name}");
-            }
-            else
-            {
-                player = GameObject.Find("Player");
-                if (player != null)
-                {
-                    playerTransform = player.transform;
-                    Debug.Log($"[{gameObject.name}] Found player by name: {player.name}");
-                }
-            }
+            playerTransform = FindClosestPlayer();
             
             // Nếu vẫn không tìm thấy, không làm gì
             if (playerTransform == null)
@@ -184,7 +191,7 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         // Tính khoảng cách đến player
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
         
-        // Nếu player ở trong khoảng cách nghe được
+        // Nếu player ở trong khoảng cách nghe được -> bắt đầu phát
         if (distanceToPlayer <= maxDistance)
         {
             // Nếu chưa đang phát, bắt đầu phát
@@ -195,8 +202,8 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         }
         else
         {
-            // Nếu player ở xa, dừng âm thanh
-            if (isPlayingSound)
+            // Chỉ dừng khi vượt quá (maxDistance + hysteresis) để tránh stop/start liên tục ở rìa
+            if (isPlayingSound && distanceToPlayer > (maxDistance + Mathf.Max(0f, distanceHysteresis)))
             {
                 StopPlayingSound();
             }
@@ -341,5 +348,30 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         {
             SoundManager.Instance.PlaySFX(enemySoundClip, soundVolume);
         }
+    }
+
+    private Transform FindClosestPlayer()
+    {
+        if (string.IsNullOrEmpty(playerTag)) return null;
+        GameObject[] players = GameObject.FindGameObjectsWithTag(playerTag);
+        if (players == null || players.Length == 0)
+        {
+            GameObject byName = GameObject.Find("Player");
+            return byName != null ? byName.transform : null;
+        }
+        float bestDist = float.MaxValue;
+        Transform best = null;
+        Vector3 myPos = transform.position;
+        foreach (var go in players)
+        {
+            if (go == null || !go.activeInHierarchy) continue;
+            float d = (go.transform.position - myPos).sqrMagnitude;
+            if (d < bestDist)
+            {
+                bestDist = d;
+                best = go.transform;
+            }
+        }
+        return best;
     }
 }

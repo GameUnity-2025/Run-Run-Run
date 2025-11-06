@@ -10,7 +10,14 @@ public class SoundManager : MonoBehaviour
     public AudioClip gemCollectSound;
     public AudioClip waterSplashSound; // Âm thanh khi rơi xuống nước
 
-    // Enemy sounds were migrated to per-enemy clips. No enemy clips are stored here anymore.
+    [Header("Enemy 3D Defaults")]
+    [Tooltip("Khoảng cách tối thiểu để nghe âm thanh ở mức đầy đủ (enemy)")]
+    [SerializeField] private float enemyMinDistance = 1f;
+    [Tooltip("Khoảng cách tối đa để nghe được âm thanh (enemy)")]
+    [SerializeField] private float enemyMaxDistance = 3f;
+    [Tooltip("Độ 3D của âm thanh enemy (0=2D,1=3D)")]
+    [Range(0f, 1f)]
+    [SerializeField] private float enemySpatialBlend = 0.75f;
 
     [Header("Ambient Sounds")]
     public AudioClip waterAmbientSound; // Âm thanh nước chảy trong map
@@ -146,6 +153,49 @@ public class SoundManager : MonoBehaviour
         {
             ambientSource.volume = Mathf.Clamp01(volume);
         }
+    }
+
+    // === Enemy Audio Utilities ===
+    public void ConfigureEnemy3DSource(AudioSource source, float volumeMultiplier = 1f)
+    {
+        if (source == null) return;
+        source.playOnAwake = false;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.spatialBlend = enemySpatialBlend;
+        source.minDistance = enemyMinDistance;
+        source.maxDistance = enemyMaxDistance;
+        source.mute = false;
+        source.outputAudioMixerGroup = null;
+        source.bypassEffects = false;
+        source.bypassListenerEffects = false;
+        source.bypassReverbZones = false;
+        source.volume = Mathf.Clamp01(sfxVolume * Mathf.Clamp01(volumeMultiplier) * Mathf.Clamp01(defaultSFXVolume <= 0f ? 1f : defaultSFXVolume));
+    }
+
+    public void PlayEnemyLoop3D(AudioSource source, AudioClip clip, float volumeMultiplier = 1f)
+    {
+        if (source == null || clip == null) return;
+        ConfigureEnemy3DSource(source, volumeMultiplier);
+        source.clip = clip;
+        source.loop = true;
+        if (!source.isPlaying)
+        {
+            source.Play();
+        }
+    }
+
+    public void StopEnemySound(AudioSource source)
+    {
+        if (source == null) return;
+        source.Stop();
+    }
+
+    public void PlayEnemyOneShot3D(AudioSource source, AudioClip clip, float volumeMultiplier = 1f)
+    {
+        if (source == null || clip == null) return;
+        ConfigureEnemy3DSource(source, volumeMultiplier);
+        source.loop = false;
+        source.PlayOneShot(clip, source.volume);
     }
 }
 

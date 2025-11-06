@@ -4,12 +4,22 @@ public class EnemyHorizontal : BaseEnemyMovement
 {
     private bool movingRight = true;
     private bool hasPlayedFirstSound = false; // Để phát âm thanh ngay lần đầu
+    [Header("Sound - Move SFX")]
+    [SerializeField] private AudioClip moveSFX; // Clip phát theo Animator Event
+    private EnemySoundController soundController;
+    private AudioSource oneShotSource;
 
     protected override void Start()
     {
         base.Start();
         footstepTimer = 0f; // Đảm bảo timer bắt đầu từ 0
         hasPlayedFirstSound = false;
+        soundController = GetComponent<EnemySoundController>();
+        oneShotSource = GetComponent<AudioSource>();
+        if (oneShotSource == null)
+        {
+            oneShotSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     protected override void Move()
@@ -52,5 +62,23 @@ public class EnemyHorizontal : BaseEnemyMovement
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    // Gọi từ Animation Event
+    public void PlayMoveSFX()
+    {
+        if (moveSFX == null) return;
+        if (soundController != null)
+        {
+            soundController.PlayOneShot3D(moveSFX);
+        }
+        else if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.ConfigureEnemy3DSource(oneShotSource);
+            oneShotSource.spatialBlend = 1f;
+            oneShotSource.minDistance = 1f;
+            oneShotSource.maxDistance = 3f;
+            SoundManager.Instance.PlayEnemyOneShot3D(oneShotSource, moveSFX, 1f);
+        }
     }
 }
