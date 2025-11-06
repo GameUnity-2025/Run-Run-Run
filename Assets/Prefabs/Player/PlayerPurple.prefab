@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 7442222636499594418}
   - component: {fileID: 1300540405153309895}
   - component: {fileID: 6366521431633203047}
-  - component: {fileID: -10086215793774097}
   m_Layer: 0
   m_Name: PlayerPurple
   m_TagString: Player
@@ -116,7 +115,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 849561021
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 5416524585157233970, guid: c7aa88342e132a04d9941ff35b152bb6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -294,17 +293,3 @@ MonoBehaviour:
     characterPrefab: {fileID: 8622645292198596312, guid: 50c4113f95e0b1f44967c1b4cfdf29cd, type: 3}
     price: 0
     isDefault: 0
---- !u!114 &-10086215793774097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9000643373778977954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 148d74c4bfc271a45af30e2f7b009424, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerOutOfViewKill
-  extraMargin: 1
-  onlyBelow: 1
