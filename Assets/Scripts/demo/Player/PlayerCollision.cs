@@ -23,11 +23,6 @@ public class PlayerCollision : MonoBehaviour
         {
             gameManager.GameOver();
         }
-        // Die on touching ForeGround layer (no tag required)
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("ForeGround"))
-        {
-            gameManager.GameOver();
-        }
         else if (collision.CompareTag("Goal"))
         {
             gameManager.GameWin();
