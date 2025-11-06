@@ -1498,7 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineConfiner2D
-  BoundingShape2D: {fileID: 0}
+  BoundingShape2D: {fileID: 1302593899}
   Damping: 0
   SlowingDistance: 5
   OversizeWindow:
@@ -16039,7 +16039,7 @@ Transform:
   m_GameObject: {fileID: 1190703838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.47056, y: -0.40254, z: -10}
+  m_LocalPosition: {x: 4.470558, y: -0.40253997, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16764,8 +16764,8 @@ Transform:
   m_GameObject: {fileID: 1302593898}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.25, y: -0.23, z: 0}
-  m_LocalScale: {x: 1, y: 8.095799, z: 1}
+  m_LocalPosition: {x: 21.93, y: -0.55, z: 0}
+  m_LocalScale: {x: 3.0741117, y: 9.741675, z: 1.2033}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
