@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Nếu game over hoặc player bị khóa -> không xử lý input
         if (!canMove || gameManager.IsGameOver() || gameManager.IsGameWon())
         {
             rb.linearVelocity = Vector2.zero;
@@ -45,26 +44,22 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Di chuyển trái phải
-        float move = Input.GetAxis("Horizontal");
+        // ƯU TIÊN mobile nếu có nhấn, nếu không thì dùng bàn phím
+        float move = Mathf.Abs(MobileInput.horizontal) > 0.01f
+                     ? MobileInput.horizontal
+                     : Input.GetAxisRaw("Horizontal");
+
         rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
 
-        // ⚡ Quay đầu theo hướng di chuyển
-        if (move > 0 && !facingRight)
-            Flip();
-        else if (move < 0 && facingRight)
-            Flip();
+        if (move > 0 && !facingRight) Flip();
+        else if (move < 0 && facingRight) Flip();
 
         HandleJump();
 
-        // Rơi khỏi vực
-        if (transform.position.y < -10f)
-        {
-            TriggerGameOver();
-        }
-
+        if (transform.position.y < -10f) TriggerGameOver();
         UpdateAnimation();
     }
+
 
     // 🔄 Hàm quay đầu player
     private void Flip()
@@ -99,12 +94,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void HandleJump()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        // Nhảy từ mobile hoặc bàn phím đều được
+        bool jumpPressed = MobileInput.ConsumeJump() || Input.GetButtonDown("Jump");
+
+        if (jumpPressed && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isGrounded = false;
