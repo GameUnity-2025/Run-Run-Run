@@ -35,8 +35,8 @@ public class PlayerCollision : MonoBehaviour
         {
             gameManager.GameWin();
         }
-        // Kiểm tra rơi xuống nước (có tag "Water" hoặc layer "Water")
-        else if (collision.CompareTag("Water") || collision.gameObject.layer == LayerMask.NameToLayer("Water"))
+        // Kiểm tra rơi xuống nước (kiểm tra layer "Water")
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
             PlayWaterSplashSound();
             gameManager.GameOver();
