@@ -48,6 +48,7 @@ MonoBehaviour:
   playerJumpSound: {fileID: 8300000, guid: 394afc87723d4094a9ef9d607e5214dc, type: 3}
   gemCollectSound: {fileID: 8300000, guid: 6f218596338729f44925a22e6995e22a, type: 3}
   waterSplashSound: {fileID: 8300000, guid: e83034a4afefd644394d1b9af042d539, type: 3}
+  gameOverSound: {fileID: 8300000, guid: 4d35816aeca8e3f48b599a67eacdc03a, type: 3}
   enemyMinDistance: 1
   enemyMaxDistance: 3
   enemySpatialBlend: 0.75

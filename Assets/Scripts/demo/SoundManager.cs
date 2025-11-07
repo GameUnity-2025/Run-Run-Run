@@ -10,6 +10,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip gemCollectSound;
     public AudioClip waterSplashSound; // Âm thanh khi rơi xuống nước
 
+    [Header("UI Sounds")]
+    public AudioClip gameOverSound;
+
     [Header("Enemy 3D Defaults")]
     [Tooltip("Khoảng cách tối thiểu để nghe âm thanh ở mức đầy đủ (enemy)")]
     [SerializeField] private float enemyMinDistance = 1f;
