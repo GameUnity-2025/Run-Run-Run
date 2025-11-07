@@ -9,9 +9,12 @@ public class OptionsMenuController : MonoBehaviour
     public Button sfxButton;
     public Button bgmButton;
 
-    [Header("Slash Overlays")]
-    public GameObject sfxSlash;
-    public GameObject bgmSlash;
+    [Header("Button Images")]
+    public Sprite soundOnSprite;
+    public Sprite soundOffSprite;
+
+    private Image sfxImage;
+    private Image bgmImage;
 
     private bool sfxMuted = false;
     private bool bgmMuted = false;
@@ -24,6 +27,9 @@ public class OptionsMenuController : MonoBehaviour
     {
         audioManager = AudioManager.Instance;
 
+        sfxImage = sfxButton.GetComponent<Image>();
+        bgmImage = bgmButton.GetComponent<Image>();
+
         sfxButton.onClick.AddListener(ToggleSFX);
         bgmButton.onClick.AddListener(ToggleBGM);
 
@@ -33,7 +39,6 @@ public class OptionsMenuController : MonoBehaviour
         sfxSlider.onValueChanged.AddListener(SetSFXVolume);
         bgmSlider.onValueChanged.AddListener(SetBGMVolume);
 
-        // Khôi phục trạng thái khi mở lại menu
         sfxMuted = PlayerPrefs.GetInt("SFX_Muted", 0) == 1;
         bgmMuted = PlayerPrefs.GetInt("BGM_Muted", 0) == 1;
 
@@ -46,8 +51,7 @@ public class OptionsMenuController : MonoBehaviour
         sfxSlider.value = audioManager.sfxSource.volume;
         bgmSlider.value = audioManager.musicSource.volume;
 
-        sfxSlash.SetActive(sfxMuted);
-        bgmSlash.SetActive(bgmMuted);
+        UpdateButtonIcons();
     }
 
     void SetSFXVolume(float value)
@@ -73,7 +77,6 @@ public class OptionsMenuController : MonoBehaviour
         if (audioManager == null) return;
 
         sfxMuted = !sfxMuted;
-        sfxSlash.SetActive(sfxMuted);
 
         if (sfxMuted)
         {
@@ -87,6 +90,8 @@ public class OptionsMenuController : MonoBehaviour
             audioManager.sfxSource.volume = lastSFXVolume;
         }
 
+        UpdateButtonIcons();
+
         PlayerPrefs.SetInt("SFX_Muted", sfxMuted ? 1 : 0);
         PlayerPrefs.SetFloat("SFX_Volume", audioManager.sfxSource.volume);
     }
@@ -96,7 +101,6 @@ public class OptionsMenuController : MonoBehaviour
         if (audioManager == null) return;
 
         bgmMuted = !bgmMuted;
-        bgmSlash.SetActive(bgmMuted);
 
         if (bgmMuted)
         {
@@ -110,7 +114,35 @@ public class OptionsMenuController : MonoBehaviour
             audioManager.musicSource.volume = lastBGMVolume;
         }
 
+        UpdateButtonIcons();
+
         PlayerPrefs.SetInt("BGM_Muted", bgmMuted ? 1 : 0);
         PlayerPrefs.SetFloat("BGM_Volume", audioManager.musicSource.volume);
+    }
+
+    public void UpdateSliders(float sfxValue, float bgmValue)
+    {
+        if (sfxSlider != null) sfxSlider.value = sfxValue;
+        if (bgmSlider != null) bgmSlider.value = bgmValue;
+        UpdateButtonIcons();
+    }
+
+    void UpdateButtonIcons()
+    {
+        if (sfxImage != null)
+            sfxImage.sprite = sfxMuted ? soundOffSprite : soundOnSprite;
+
+        if (bgmImage != null)
+            bgmImage.sprite = bgmMuted ? soundOffSprite : soundOnSprite;
+    }
+
+    public void OnBackButtonPressed()
+    {
+        // Tìm UIManager trong scene và đóng Settings Panel
+        UIManager ui = FindAnyObjectByType<UIManager>();
+        if (ui != null)
+            ui.CloseSettings();
+        else
+            gameObject.SetActive(false); // fallback nếu không tìm thấy UIManager
     }
 }

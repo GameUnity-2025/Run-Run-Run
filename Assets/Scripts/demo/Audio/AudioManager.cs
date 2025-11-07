@@ -25,12 +25,18 @@ public class AudioManager : MonoBehaviour
     public AudioClip coin;
     public AudioClip jump;
 
+    private float sfxVolume = 1f;
+    private float musicVolume = 1f;
+    private bool sfxMuted = false;
+    private bool musicMuted = false;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            LoadSettings();
         }
         else
         {
@@ -53,10 +59,9 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator HandleSceneChange(Scene newScene)
     {
-        yield return null; // Chờ 1 frame cho chắc chắn scene đã load xong
+        yield return null;
         string sceneName = newScene.name;
 
-        // 🎮 Nếu là gameplay (Game, Level1, Level2...)
         if (sceneName == "Game" || (sceneName.StartsWith("Level") && sceneName != "LevelSelect"))
         {
             StopMusic();
@@ -64,7 +69,6 @@ public class AudioManager : MonoBehaviour
             yield return new WaitForSeconds(game_start.length);
             PlayMusic(gameplay_music);
         }
-        // 🎵 Nếu là Menu, Shop hoặc LevelSelect
         else if (sceneName == "Menu" || sceneName == "Shop" || sceneName == "LevelSelect")
         {
             PlaySFX(menu_back);
@@ -88,11 +92,11 @@ public class AudioManager : MonoBehaviour
     {
         if (clip == null) return;
 
-        // 🔧 Nếu clip khác hoặc chưa phát thì mới phát lại
         if (musicSource.clip != clip || !musicSource.isPlaying)
         {
             musicSource.clip = clip;
             musicSource.loop = true;
+            musicSource.volume = musicMuted ? 0 : musicVolume;
             musicSource.Play();
         }
     }
@@ -103,7 +107,48 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
+        sfxSource.volume = sfxMuted ? 0 : sfxVolume;
         sfxSource.PlayOneShot(clip);
+    }
+
+    // ====== VOLUME CONTROL (gọi từ OptionsMenuController) ======
+    public void SetSFXVolume(float volume)
+    {
+        sfxVolume = Mathf.Clamp01(volume);
+        sfxSource.volume = sfxMuted ? 0 : sfxVolume;
+        PlayerPrefs.SetFloat("SFX_Volume", sfxVolume);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        musicVolume = Mathf.Clamp01(volume);
+        musicSource.volume = musicMuted ? 0 : musicVolume;
+        PlayerPrefs.SetFloat("BGM_Volume", musicVolume);
+    }
+
+    public void SetSFXMute(bool mute)
+    {
+        sfxMuted = mute;
+        sfxSource.volume = mute ? 0 : sfxVolume;
+        PlayerPrefs.SetInt("SFX_Muted", mute ? 1 : 0);
+    }
+
+    public void SetMusicMute(bool mute)
+    {
+        musicMuted = mute;
+        musicSource.volume = mute ? 0 : musicVolume;
+        PlayerPrefs.SetInt("BGM_Muted", mute ? 1 : 0);
+    }
+
+    private void LoadSettings()
+    {
+        sfxVolume = PlayerPrefs.GetFloat("SFX_Volume", 1f);
+        musicVolume = PlayerPrefs.GetFloat("BGM_Volume", 1f);
+        sfxMuted = PlayerPrefs.GetInt("SFX_Muted", 0) == 1;
+        musicMuted = PlayerPrefs.GetInt("BGM_Muted", 0) == 1;
+
+        sfxSource.volume = sfxMuted ? 0 : sfxVolume;
+        musicSource.volume = musicMuted ? 0 : musicVolume;
     }
 
     // ====== Convenience ======
