@@ -1,267 +1,267 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Diagnostics;
 
 public class ShopManager : MonoBehaviour
 {
     [Header("Shop Settings")]
-    public PlayerData[] players;                  // Danh sách nhân vật
-    public GameObject playerButtonPrefab;         // Prefab nút chọn nhân vật
-    public Transform buttonContainer;             // Nơi chứa các nút
-	[Header("Currency UI")]
-	public TextMeshProUGUI gemsText;              // Hiển thị số gems hiện có
+    public PlayerData[] players;
+    public GameObject playerButtonPrefab;
+    public Transform buttonContainer;
 
-	private void Start()
+    [Header("Currency UI")]
+    public TextMeshProUGUI gemsText;
+
+    [Header("Detail Panel")]
+    public GameObject detailPanel;
+    public Image detailCharacterImage;
+    public TextMeshProUGUI detailNameText;
+    public TextMeshProUGUI detailPriceText;
+    public Image detailGemIcon;
+    public Button detailBuyButton;
+    public Button detailSelectButton;
+    public TextMeshProUGUI buyButtonText;
+    public TextMeshProUGUI selectButtonText;
+
+    private string selectedName;
+    private PlayerData currentViewingPlayer;
+
+    private void Start()
     {
-		if (gemsText == null)
-		{
-			var found = GameObject.Find("GemsText");
-			if (found != null) gemsText = found.GetComponent<TextMeshProUGUI>();
-		}
-		RefreshGemsUI();
-		LoadShop();
+        // Gán gems text nếu chưa có
+        if (gemsText == null)
+        {
+            var found = GameObject.Find("GemsText");
+            if (found != null) gemsText = found.GetComponent<TextMeshProUGUI>();
+        }
+
+        // Gán nhân vật mặc định
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString("SelectedCharacter", "")))
+        {
+            var def = GetDefaultPlayer();
+            if (def != null)
+                PlayerPrefs.SetString("SelectedCharacter", def.playerName);
+        }
+
+        selectedName = PlayerPrefs.GetString("SelectedCharacter", "");
+
+        if (detailPanel)
+            detailPanel.SetActive(false);
+
+        if (detailBuyButton)
+            detailBuyButton.onClick.AddListener(OnDetailBuyClicked);
+
+        if (detailSelectButton)
+            detailSelectButton.onClick.AddListener(OnDetailSelectClicked);
+
+        RefreshGemsUI();
+        LoadShop();
     }
 
-	void LoadShop()
+    // 🔹 Tạo danh sách PlayerButton
+    public void LoadShop()
     {
-		// Xóa nút cũ trước khi tạo lại
-		foreach (Transform child in buttonContainer)
-			Destroy(child.gameObject);
+        if (!buttonContainer || !playerButtonPrefab)
+        {
+            Debug.LogError("ShopManager: buttonContainer hoặc playerButtonPrefab chưa gán!");
+            return;
+        }
 
-		string selectedName = PlayerPrefs.GetString("SelectedCharacter", "PlayerDefault");
+        foreach (Transform child in buttonContainer)
+            Destroy(child.gameObject);
 
-		// Tạo nút mới cho từng nhân vật
-		foreach (PlayerData player in players)
-		{
-			GameObject btn = Instantiate(playerButtonPrefab, buttonContainer);
+        foreach (var player in players)
+        {
+            if (player == null) continue;
 
-			// Gán tên nhân vật lên Text
-			var nameText = btn.transform.Find("CharacterName")?.GetComponent<TextMeshProUGUI>();
-			if (nameText != null)
-				nameText.text = player.playerName;
+            // ✅ Giữ nguyên layout gốc của prefab
+            var obj = Instantiate(playerButtonPrefab, buttonContainer, false);
 
-			// Gán giá nếu có node PriceText
-			var priceText = btn.transform.Find("PriceText")?.GetComponent<TextMeshProUGUI>();
-			bool unlocked = IsUnlocked(player);
-			bool isCurrent = selectedName == player.playerName;
-			if (priceText != null)
-			{
-				priceText.text = unlocked || player.isDefault ? "Owned" : player.price.ToString();
-			}
+            var ui = obj.GetComponent<ShopItemUI>();
+            bool unlocked = IsUnlocked(player);
+            bool selected = selectedName == player.playerName;
 
-			// Nút action
-			Button selectButton = btn.transform.Find("SelectButton")?.GetComponent<Button>();
-			if (selectButton == null)
-				selectButton = btn.transform.Find("SellectButton")?.GetComponent<Button>();
-			if (selectButton == null)
-				selectButton = btn.GetComponentInChildren<Button>();
+            if (ui != null)
+                ui.Setup(player, this, unlocked, selected);
+        }
+    }
 
-			if (selectButton != null)
-			{
-				var selectedPlayer = player;
-				selectButton.onClick.RemoveAllListeners();
-				var btnText = selectButton.GetComponentInChildren<TextMeshProUGUI>();
-				if (unlocked || player.isDefault)
-				{
-					if (isCurrent)
-					{
-						selectButton.interactable = false;
-						if (btnText != null) btnText.text = "Selected";
-					}
-					else
-					{
-						selectButton.interactable = true;
-						selectButton.onClick.AddListener(() => SelectPlayer(selectedPlayer));
-						if (btnText != null) btnText.text = "Select";
-					}
-				}
-				else
-				{
-					selectButton.interactable = true;
-					selectButton.onClick.AddListener(() => TryBuy(selectedPlayer));
-					if (btnText != null) btnText.text = "Buy";
-				}
-			}
-			else
-			{
-				UnityEngine.Debug.LogWarning("ShopManager: Không tìm thấy Button chọn trong prefab.");
-			}
-		}
+    // 🔹 Hiển thị chi tiết nhân vật
+    public void ShowDetail(PlayerData player)
+    {
+        if (player == null) return;
+        currentViewingPlayer = player;
+
+        if (!detailPanel) return;
+        detailPanel.SetActive(true);
+
+        if (detailCharacterImage)
+            detailCharacterImage.sprite = player.characterSprite;
+
+        if (detailNameText)
+            detailNameText.text = player.playerName;
+
+        bool unlocked = IsUnlocked(player);
+        bool selected = selectedName == player.playerName;
+
+        // Hiển thị giá và icon gem
+        if (detailPriceText)
+        {
+            if (unlocked || player.isDefault)
+            {
+                detailPriceText.gameObject.SetActive(false);
+                if (detailGemIcon) detailGemIcon.gameObject.SetActive(false);
+            }
+            else
+            {
+                detailPriceText.gameObject.SetActive(true);
+                detailPriceText.text = player.price.ToString();
+                if (detailGemIcon) detailGemIcon.gameObject.SetActive(true);
+            }
+        }
+
+        UpdateDetailButtons(unlocked, selected);
+    }
+
+    // 🔹 Cập nhật nút mua và chọn
+    private void UpdateDetailButtons(bool unlocked, bool selected)
+    {
+        if (detailBuyButton && buyButtonText)
+        {
+            if (unlocked || currentViewingPlayer.isDefault)
+            {
+                detailBuyButton.gameObject.SetActive(true);
+                detailBuyButton.interactable = false;
+                buyButtonText.text = "Owned";
+            }
+            else
+            {
+                detailBuyButton.gameObject.SetActive(true);
+                int gems = GemsManager.GetGems();
+                detailBuyButton.interactable = gems >= currentViewingPlayer.price;
+                buyButtonText.text = detailBuyButton.interactable ? "Purchase" : "Not Enough Gems";
+            }
+        }
+
+        if (detailSelectButton && selectButtonText)
+        {
+            if (unlocked || currentViewingPlayer.isDefault)
+            {
+                detailSelectButton.gameObject.SetActive(true);
+                if (selected)
+                {
+                    detailSelectButton.interactable = false;
+                    selectButtonText.text = "Selected";
+                }
+                else
+                {
+                    detailSelectButton.interactable = true;
+                    selectButtonText.text = "Select";
+                }
+            }
+            else
+            {
+                detailSelectButton.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void OnDetailBuyClicked()
+    {
+        if (currentViewingPlayer == null) return;
+
+        if (GemsManager.SpendGems(currentViewingPlayer.price))
+        {
+            Unlock(currentViewingPlayer);
+            RefreshGemsUI();
+            LoadShop();
+            ShowDetail(currentViewingPlayer);
+
+            if (buyButtonText)
+                buyButtonText.text = "Owned";
+            if (detailBuyButton)
+                detailBuyButton.interactable = false;
+
+            Debug.Log($"✅ Purchased: {currentViewingPlayer.playerName}");
+        }
+        else
+        {
+            Debug.Log($"❌ Not enough gems to buy {currentViewingPlayer.playerName}");
+        }
+    }
+
+    private void OnDetailSelectClicked()
+    {
+        if (currentViewingPlayer == null) return;
+        SelectPlayer(currentViewingPlayer);
+        ShowDetail(currentViewingPlayer);
     }
 
     public void SelectPlayer(PlayerData player)
     {
-        // Lưu tên nhân vật đã chọn
-        PlayerPrefs.SetString("SelectedCharacter", player.playerName);
+        if (player == null) return;
+
+        selectedName = player.playerName;
+        PlayerPrefs.SetString("SelectedCharacter", selectedName);
         PlayerPrefs.Save();
-        UnityEngine.Debug.Log("Selected: " + player.playerName);
         LoadShop();
+        Debug.Log($"Selected character: {selectedName}");
     }
 
-	// Dùng trong Inspector: truyền vào tên nhân vật tương ứng của button
-	public void OnClick_SelectOrBuy(string playerName)
-	{
-		var player = GetPlayerByName(playerName);
-		if (player == null)
-		{
-			UnityEngine.Debug.LogWarning("ShopManager: Player not found for name: " + playerName);
-			return;
-		}
-		if (IsUnlocked(player) || player.isDefault)
-		{
-			SelectPlayer(player);
-		}
-		else
-		{
-			TryBuy(player);
-		}
-	}
+    private static string GetUnlockKey(string name) => $"Unlocked_{name}";
 
-	private void TryBuy(PlayerData player)
-	{
-		if (player.isDefault)
-		{
-			SelectPlayer(player);
-			return;
-		}
+    private bool IsUnlocked(PlayerData player)
+    {
+        if (player == null) return false;
+        return player.isDefault || PlayerPrefs.GetInt(GetUnlockKey(player.playerName), 0) == 1;
+    }
 
-		if (IsUnlocked(player))
-		{
-			SelectPlayer(player);
-			return;
-		}
+    private void Unlock(PlayerData player)
+    {
+        PlayerPrefs.SetInt(GetUnlockKey(player.playerName), 1);
+        PlayerPrefs.Save();
+    }
 
-		if (GemsManager.SpendGems(player.price))
-		{
-			Unlock(player);
-			RefreshGemsUI();
-			LoadShop();
-		}
-		else
-		{
-			UnityEngine.Debug.Log("Not enough gems to buy: " + player.playerName);
-		}
-	}
+    private void RefreshGemsUI()
+    {
+        if (gemsText)
+            gemsText.text = GemsManager.GetGems().ToString();
+    }
 
-	private static string GetUnlockKey(string playerName)
-	{
-		return "Unlocked_" + playerName;
-	}
+    private PlayerData GetDefaultPlayer()
+    {
+        foreach (var p in players)
+            if (p != null && p.isDefault)
+                return p;
+        return players.Length > 0 ? players[0] : null;
+    }
 
-	private PlayerData GetPlayerByName(string playerName)
-	{
-		foreach (var p in players)
-		{
-			if (p != null && p.playerName == playerName) return p;
-		}
-		return null;
-	}
+    public void ResetAllPurchases()
+    {
+        foreach (var p in players)
+        {
+            if (p == null || p.isDefault) continue;
+            PlayerPrefs.DeleteKey(GetUnlockKey(p.playerName));
+        }
+        var def = GetDefaultPlayer();
+        PlayerPrefs.SetString("SelectedCharacter", def != null ? def.playerName : "");
+        PlayerPrefs.Save();
+        selectedName = PlayerPrefs.GetString("SelectedCharacter", "");
+        LoadShop();
 
-	private bool IsUnlocked(PlayerData player)
-	{
-		if (player.isDefault) return true;
-		return PlayerPrefs.GetInt(GetUnlockKey(player.playerName), 0) == 1;
-	}
+        if (detailPanel)
+            detailPanel.SetActive(false);
+    }
 
-	private void Unlock(PlayerData player)
-	{
-		PlayerPrefs.SetInt(GetUnlockKey(player.playerName), 1);
-		PlayerPrefs.Save();
-	}
+    public GameObject GetSelectedCharacterPrefab()
+    {
+        var p = System.Array.Find(players, x => x.playerName == selectedName);
+        return p != null ? p.characterPrefab : null;
+    }
 
-	private void RefreshGemsUI()
-	{
-		if (gemsText != null)
-		{
-			gemsText.text = GemsManager.GetGems().ToString();
-		}
-	}
-
-	// Debug/Utility: Reset unlocks so you can re-test the buying flow
-	public void ResetPurchasesKeepGems()
-	{
-		ResetPurchasesInternal(false);
-	}
-
-	public void ResetPurchasesAndGems()
-	{
-		ResetPurchasesInternal(true);
-	}
-
-    //reset tất cả mua và tùy chọn đặt lại gems
-    private void ResetPurchasesInternal(bool alsoResetGems)
-	{
-		// Clear all unlocked flags
-		foreach (var p in players)
-		{
-			if (p == null) continue;
-			if (p.isDefault) continue; // default luôn mở
-			PlayerPrefs.SetInt(GetUnlockKey(p.playerName), 0);
-		}
-
-		// Đặt lại nhân vật mặc định
-		PlayerPrefs.SetString("SelectedCharacter", "PlayerDefault");
-
-		if (alsoResetGems)
-		{
-			PlayerPrefs.SetInt("TotalGems", 0);
-		}
-
-		PlayerPrefs.Save();
-
-		// Refresh UI
-		RefreshGemsUI();
-		LoadShop();
-	}
-
-	// Reset một nhân vật duy nhất (dùng cho nút Reset cạnh từng item)
-	//public void ResetCharacterPurchase(string playerName)
-	//{
-	//	var p = GetPlayerByName(playerName);
-	//	if (p == null)
-	//	{
-	//		UnityEngine.Debug.LogWarning("ShopManager: Player not found for reset: " + playerName);
-	//		return;
-	//	}
-
-	//	if (!p.isDefault)
-	//	{
-	//		PlayerPrefs.SetInt(GetUnlockKey(p.playerName), 0);
-	//	}
-
-	//	// Nếu đang chọn đúng nhân vật này, chuyển về mặc định
-	//	string selectedName = PlayerPrefs.GetString("SelectedCharacter", "PlayerDefault");
-	//	if (selectedName == p.playerName)
-	//	{
-	//		PlayerPrefs.SetString("SelectedCharacter", "PlayerDefault");
-	//	}
-
-	//	PlayerPrefs.Save();
-	//	LoadShop();
-	//}
-
-	// Hoàn tác toàn bộ: xóa tất cả mua và hoàn gems đã dùng
-	public void ResetAllPurchasesRefundGems()
-	{
-		int refund = 0;
-		foreach (var p in players)
-		{
-			if (p == null) continue;
-			if (p.isDefault) continue;
-			if (PlayerPrefs.GetInt(GetUnlockKey(p.playerName), 0) == 1)
-			{
-				refund += p.price;
-				PlayerPrefs.SetInt(GetUnlockKey(p.playerName), 0);
-			}
-		}
-
-		if (refund > 0) GemsManager.AddGems(refund);
-
-		PlayerPrefs.SetString("SelectedCharacter", "PlayerDefault");
-		PlayerPrefs.Save();
-
-		RefreshGemsUI();
-		LoadShop();
-	}
+    public void CloseDetailPanel()
+    {
+        if (detailPanel)
+            detailPanel.SetActive(false);
+    }
 }

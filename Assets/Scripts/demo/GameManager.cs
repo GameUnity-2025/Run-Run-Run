@@ -71,8 +71,14 @@ public class GameManager : MonoBehaviour
                 GameWinUi.SetActive(true);
             }
             Debug.Log("You Win! Final Score: " + score);
+
+            // ✨ THÊM 2 DÒNG NÀY
+            GemsManager.AddGems(score);  // Lưu score thành gems
+            Debug.Log($"Earned {score} gems!");
         }
     }
+
+
 
     public void RestartGame()
     {
