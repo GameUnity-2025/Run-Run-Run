@@ -4586,6 +4586,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trap
       objectReference: {fileID: 0}
+    - target: {fileID: 6424530206930779852, guid: 088799993e378724da6b9e4a059a1a93, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424530206930779852, guid: 088799993e378724da6b9e4a059a1a93, type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8397678350103885088, guid: 088799993e378724da6b9e4a059a1a93, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5
@@ -4636,7 +4644,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8397678350103885088, guid: 088799993e378724da6b9e4a059a1a93, type: 3}
   m_PrefabInstance: {fileID: 7699770764222926663}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4271250266847887959
+--- !u!114 &2892590621077207164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
