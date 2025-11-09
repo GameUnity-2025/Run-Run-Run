@@ -46,6 +46,10 @@ public class GameManager : MonoBehaviour
         if (!isGameOver)
         {
             isGameOver = true;
+            if (SoundManager.Instance != null && SoundManager.Instance.gameOverSound != null)
+            {
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.gameOverSound, SoundManager.Instance.defaultSFXVolume);
+            }
             if (gameOverUi != null)
             {
                 gameOverUi.SetActive(true);
@@ -82,9 +86,6 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        isGameOver = false;
-        score = 0;
-        UpdateScoreUI();
         Time.timeScale = 1;
 
         // Lấy scene hiện tại

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8543827037927616790}
   - component: {fileID: 3583481032170029309}
   - component: {fileID: 8699074553052296917}
+  - component: {fileID: -4280565447496327225}
   m_Layer: 7
   m_Name: frog
   m_TagString: Enemy
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1913531815
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -857311260081076315, guid: b1c60e17ccdecae42af2bd3ea908fd42, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -185,6 +186,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   animator: {fileID: 7519542151445594810}
+  frogJumpClip: {fileID: 8300000, guid: 446ddfff6e7fd3545ad77fa9d6e67fac, type: 3}
 --- !u!50 &3583481032170029309
 Rigidbody2D:
   serializedVersion: 5
@@ -258,6 +260,25 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-4280565447496327225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005328927541279808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fdcb11c75312b44b03b1689d0bab79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySoundController
+  soundVolume: 0.5
+  minDistance: 1
+  maxDistance: 5
+  spatialBlend: 1
+  continuousLoop: 0
+  playerTag: Player
+  playerTransform: {fileID: 0}
 --- !u!1 &5015418506954458155
 GameObject:
   m_ObjectHideFlags: 0

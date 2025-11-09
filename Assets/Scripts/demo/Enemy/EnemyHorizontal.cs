@@ -3,6 +3,14 @@ using UnityEngine;
 public class EnemyHorizontal : BaseEnemyMovement
 {
     private bool movingRight = true;
+    private bool hasPlayedFirstSound = false; // Để phát âm thanh ngay lần đầu
+
+    protected override void Start()
+    {
+        base.Start();
+        footstepTimer = 0f; // Đảm bảo timer bắt đầu từ 0
+        hasPlayedFirstSound = false;
+    }
 
     protected override void Move()
     {
@@ -12,6 +20,7 @@ public class EnemyHorizontal : BaseEnemyMovement
         if (movingRight)
         {
             transform.Translate(Vector3.right * speed * Time.deltaTime);
+            // Âm thanh được điều khiển bởi CheckPlayerDistanceAndControlSound() trong BaseEnemyMovement
             if (transform.position.x >= right)
             {
                 movingRight = false;
@@ -21,6 +30,7 @@ public class EnemyHorizontal : BaseEnemyMovement
         else
         {
             transform.Translate(Vector3.left * speed * Time.deltaTime);
+            // Âm thanh được điều khiển bởi CheckPlayerDistanceAndControlSound() trong BaseEnemyMovement
             if (transform.position.x <= left)
             {
                 movingRight = true;
@@ -28,6 +38,14 @@ public class EnemyHorizontal : BaseEnemyMovement
             }
         }
     }
+
+    private void PlaySnailSound()
+    {
+        // Không cần phát ở đây nữa - âm thanh sẽ được điều khiển bởi CheckPlayerDistanceAndControlSound() trong BaseEnemyMovement
+        // Chỉ cần đảm bảo enemy đang di chuyển
+    }
+
+    // Không cần PlaySnailSoundNow() nữa - đã được xử lý trong BaseEnemyMovement
 
     private void Flip()
     {

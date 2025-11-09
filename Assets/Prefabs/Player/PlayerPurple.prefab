@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 1300540405153309895}
   - component: {fileID: 6366521431633203047}
   - component: {fileID: -10086215793774097}
+  - component: {fileID: -7873966723598750755}
   m_Layer: 0
   m_Name: PlayerPurple
   m_TagString: Player
@@ -242,6 +243,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheck: {fileID: 6348894887795521741}
+  footstepInterval: 0.3
 --- !u!114 &1300540405153309895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,3 +310,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOutOfViewKill
   extraMargin: 1
   onlyBelow: 1
+--- !u!81 &-7873966723598750755
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000643373778977954}
+  m_Enabled: 1

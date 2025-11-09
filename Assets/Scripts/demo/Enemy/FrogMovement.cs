@@ -17,14 +17,36 @@ public class EnemyVertical : MonoBehaviour
     [Header("Animation")]
     [SerializeField] private Animator animator;         // Animator cho cóc
 
+    [Header("Sound - Frog Jump")]
+    [SerializeField] private AudioClip frogJumpClip;    // Clip nhảy của ếch (gán trong Inspector)
+
     private Rigidbody2D rb;
     private bool isGrounded;
     private bool isWaiting;
+    private EnemySoundController soundController; // dùng để tắt loop và tái dụng AudioSource
+    private AudioSource jumpAudioSource; // nguồn phát jump one-shot
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 4.5f; // điều chỉnh cho cảm giác nhảy thật
+        soundController = GetComponent<EnemySoundController>();
+        if (soundController != null)
+        {
+            // tắt phát liên tục cho ếch, chỉ phát khi nhảy
+            var scType = typeof(EnemySoundController);
+            var field = scType.GetField("continuousLoop", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field != null)
+            {
+                field.SetValue(soundController, false);
+            }
+        }
+        // chuẩn bị AudioSource để phát jump
+        jumpAudioSource = GetComponent<AudioSource>();
+        if (jumpAudioSource == null)
+        {
+            jumpAudioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     private void Update()
@@ -45,6 +67,9 @@ public class EnemyVertical : MonoBehaviour
         {
             animator.SetBool("isJumping", true);
         }
+        
+        // Âm thanh được điều khiển bởi EnemySoundController component (nếu có)
+        // Không cần làm gì ở đây
     }
 
     private IEnumerator JumpRoutine()
@@ -74,6 +99,32 @@ public class EnemyVertical : MonoBehaviour
         rb.AddForce(jumpDirection * new Vector2(horizontalForce, jumpForce), ForceMode2D.Impulse);
 
         animator.SetBool("isJumping", true);
+        // Phát one-shot clip nhảy nếu đã gán
+        if (frogJumpClip != null)
+        {
+            if (soundController != null)
+            {
+                // ép 3D thuần và khoảng cách 1..3 cho jump
+                var src = GetComponent<AudioSource>();
+                if (src != null)
+                {
+                    src.spatialBlend = 1f;
+                    src.rolloffMode = AudioRolloffMode.Linear;
+                    src.minDistance = 1f;
+                    src.maxDistance = 3f;
+                }
+                soundController.PlayOneShot3D(frogJumpClip);
+            }
+            else if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.ConfigureEnemy3DSource(jumpAudioSource);
+                // override để đảm bảo 3D thuần và tắt ngoài 3 đơn vị
+                jumpAudioSource.spatialBlend = 1f;
+                jumpAudioSource.minDistance = 1f;
+                jumpAudioSource.maxDistance = 3f;
+                SoundManager.Instance.PlayEnemyOneShot3D(jumpAudioSource, frogJumpClip, 1f);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

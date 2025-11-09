@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8856472082084176478}
   - component: {fileID: 1926529645369850265}
   - component: {fileID: -1939117807862897503}
+  - component: {fileID: -5952414451648363775}
   m_Layer: 0
   m_Name: PlayerPink
   m_TagString: Player
@@ -211,6 +212,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheck: {fileID: 3530609591964827220}
+  footstepInterval: 0.3
 --- !u!114 &8856472082084176478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +279,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerOutOfViewKill
   extraMargin: 1
   onlyBelow: 1
+--- !u!81 &-5952414451648363775
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444606009337168443}
+  m_Enabled: 1
 --- !u!1 &4348313334674318354
 GameObject:
   m_ObjectHideFlags: 0
