@@ -71,8 +71,14 @@ public class GameManager : MonoBehaviour
                 GameWinUi.SetActive(true);
             }
             Debug.Log("You Win! Final Score: " + score);
+
+            // ✨ THÊM 2 DÒNG NÀY
+            GemsManager.AddGems(score);  // Lưu score thành gems
+            Debug.Log($"Earned {score} gems!");
         }
     }
+
+
 
     public void RestartGame()
     {
@@ -92,6 +98,54 @@ public class GameManager : MonoBehaviour
     {
         return isGameOver;
     }
+
+    public void NextLevel()
+    {
+        // Lấy tên scene hiện tại
+        string currentScene = SceneManager.GetActiveScene().name;
+        string nextScene = "";
+
+        // 🟢 Nếu đang ở level đầu tiên (tên là "Game")
+        if (currentScene == "Game")
+        {
+            nextScene = "Level2";
+        }
+        else if (currentScene.StartsWith("Level"))
+        {
+            // 🟢 Cắt phần số phía sau tên scene
+            string levelNumberStr = currentScene.Substring(5); // bỏ "Level"
+            if (int.TryParse(levelNumberStr, out int levelNumber))
+            {
+                nextScene = "Level" + (levelNumber + 1);
+            }
+            else
+            {
+                Debug.LogWarning("Tên scene hiện tại không đúng định dạng LevelX!");
+                return;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Scene hiện tại không nằm trong hệ thống level!");
+            return;
+        }
+
+        // 🟢 Kiểm tra xem level kế có tồn tại không
+        if (Application.CanStreamedLevelBeLoaded(nextScene))
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(nextScene);
+            Debug.Log($"Loading next level: {nextScene}");
+        }
+        else
+        {
+            // 🔚 Nếu không có level kế → quay lại Menu
+            Debug.Log("Không có level tiếp theo → quay lại Menu.");
+            Time.timeScale = 1f;
+            SceneManager.LoadScene("Menu");
+        }
+    }
+
 
     public bool IsGameWon()
     {
