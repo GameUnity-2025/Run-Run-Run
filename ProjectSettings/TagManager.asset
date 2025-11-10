@@ -20,7 +20,7 @@ TagManager:
   - Ground
   - Enemy
   - Item
-  - 
+  - Buton
   - 
   - 
   - 
@@ -67,6 +67,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 2381435481
+    locked: 0
+  - name: Button
+    uniqueID: 1332537869
     locked: 0
   - name: UI
     uniqueID: 590852963
