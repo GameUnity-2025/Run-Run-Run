@@ -23,21 +23,38 @@ public class OptionsMenuController : MonoBehaviour
 
     private AudioManager audioManager;
 
-    void Start()
+    void OnEnable()
     {
         audioManager = AudioManager.Instance;
+        if (audioManager == null) return;
 
-        sfxImage = sfxButton.GetComponent<Image>();
-        bgmImage = bgmButton.GetComponent<Image>();
+        if (sfxButton != null)
+        {
+            sfxImage = sfxButton.GetComponent<Image>();
+            sfxButton.onClick.RemoveAllListeners();
+            sfxButton.onClick.AddListener(ToggleSFX);
+        }
 
-        sfxButton.onClick.AddListener(ToggleSFX);
-        bgmButton.onClick.AddListener(ToggleBGM);
+        if (bgmButton != null)
+        {
+            bgmImage = bgmButton.GetComponent<Image>();
+            bgmButton.onClick.RemoveAllListeners();
+            bgmButton.onClick.AddListener(ToggleBGM);
+        }
 
-        sfxSlider.value = audioManager != null ? audioManager.sfxSource.volume : 1f;
-        bgmSlider.value = audioManager != null ? audioManager.musicSource.volume : 1f;
+        if (sfxSlider != null)
+        {
+            sfxSlider.onValueChanged.RemoveAllListeners();
+            sfxSlider.value = audioManager.sfxSource.volume;
+            sfxSlider.onValueChanged.AddListener(SetSFXVolume);
+        }
 
-        sfxSlider.onValueChanged.AddListener(SetSFXVolume);
-        bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        if (bgmSlider != null)
+        {
+            bgmSlider.onValueChanged.RemoveAllListeners();
+            bgmSlider.value = audioManager.musicSource.volume;
+            bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        }
 
         sfxMuted = PlayerPrefs.GetInt("SFX_Muted", 0) == 1;
         bgmMuted = PlayerPrefs.GetInt("BGM_Muted", 0) == 1;
@@ -72,6 +89,16 @@ public class OptionsMenuController : MonoBehaviour
         }
     }
 
+    public void UpdateSliders(float sfxValue, float bgmValue)
+    {
+        if (sfxSlider != null)
+            sfxSlider.value = sfxValue;
+
+        if (bgmSlider != null)
+            bgmSlider.value = bgmValue;
+
+        UpdateButtonIcons();
+    }
     void ToggleSFX()
     {
         if (audioManager == null) return;
@@ -91,7 +118,6 @@ public class OptionsMenuController : MonoBehaviour
         }
 
         UpdateButtonIcons();
-
         PlayerPrefs.SetInt("SFX_Muted", sfxMuted ? 1 : 0);
         PlayerPrefs.SetFloat("SFX_Volume", audioManager.sfxSource.volume);
     }
@@ -115,16 +141,8 @@ public class OptionsMenuController : MonoBehaviour
         }
 
         UpdateButtonIcons();
-
         PlayerPrefs.SetInt("BGM_Muted", bgmMuted ? 1 : 0);
         PlayerPrefs.SetFloat("BGM_Volume", audioManager.musicSource.volume);
-    }
-
-    public void UpdateSliders(float sfxValue, float bgmValue)
-    {
-        if (sfxSlider != null) sfxSlider.value = sfxValue;
-        if (bgmSlider != null) bgmSlider.value = bgmValue;
-        UpdateButtonIcons();
     }
 
     void UpdateButtonIcons()
@@ -138,11 +156,10 @@ public class OptionsMenuController : MonoBehaviour
 
     public void OnBackButtonPressed()
     {
-        // Tìm UIManager trong scene và đóng Settings Panel
         UIManager ui = FindAnyObjectByType<UIManager>();
         if (ui != null)
             ui.CloseSettings();
         else
-            gameObject.SetActive(false); // fallback nếu không tìm thấy UIManager
+            gameObject.SetActive(false);
     }
 }
