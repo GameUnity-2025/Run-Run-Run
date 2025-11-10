@@ -28,6 +28,13 @@ public class OptionsMenuController : MonoBehaviour
         audioManager = AudioManager.Instance;
         if (audioManager == null) return;
 
+        // ✅ Load trạng thái từ AudioManager
+        sfxMuted = audioManager.IsSFXMuted();
+        bgmMuted = audioManager.IsMusicMuted();
+        lastSFXVolume = audioManager.GetSFXVolume();
+        lastBGMVolume = audioManager.GetMusicVolume();
+
+        // Setup buttons
         if (sfxButton != null)
         {
             sfxImage = sfxButton.GetComponent<Image>();
@@ -42,50 +49,43 @@ public class OptionsMenuController : MonoBehaviour
             bgmButton.onClick.AddListener(ToggleBGM);
         }
 
+        // Setup sliders
         if (sfxSlider != null)
         {
             sfxSlider.onValueChanged.RemoveAllListeners();
-            sfxSlider.value = audioManager.sfxSource.volume;
+            sfxSlider.value = sfxMuted ? 0 : lastSFXVolume; // ✅ Hiển thị đúng giá trị
             sfxSlider.onValueChanged.AddListener(SetSFXVolume);
         }
 
         if (bgmSlider != null)
         {
             bgmSlider.onValueChanged.RemoveAllListeners();
-            bgmSlider.value = audioManager.musicSource.volume;
+            bgmSlider.value = bgmMuted ? 0 : lastBGMVolume; // ✅ Hiển thị đúng giá trị
             bgmSlider.onValueChanged.AddListener(SetBGMVolume);
         }
-
-        sfxMuted = PlayerPrefs.GetInt("SFX_Muted", 0) == 1;
-        bgmMuted = PlayerPrefs.GetInt("BGM_Muted", 0) == 1;
-
-        float sfxVolume = PlayerPrefs.GetFloat("SFX_Volume", 1f);
-        float bgmVolume = PlayerPrefs.GetFloat("BGM_Volume", 1f);
-
-        audioManager.sfxSource.volume = sfxMuted ? 0 : sfxVolume;
-        audioManager.musicSource.volume = bgmMuted ? 0 : bgmVolume;
-
-        sfxSlider.value = audioManager.sfxSource.volume;
-        bgmSlider.value = audioManager.musicSource.volume;
 
         UpdateButtonIcons();
     }
 
     void SetSFXVolume(float value)
     {
-        if (!sfxMuted && audioManager != null)
+        if (audioManager == null) return;
+
+        if (!sfxMuted)
         {
-            audioManager.sfxSource.volume = value;
             lastSFXVolume = value;
+            audioManager.SetSFXVolume(value); // ✅ Gọi hàm AudioManager để lưu
         }
     }
 
     void SetBGMVolume(float value)
     {
-        if (!bgmMuted && audioManager != null)
+        if (audioManager == null) return;
+
+        if (!bgmMuted)
         {
-            audioManager.musicSource.volume = value;
             lastBGMVolume = value;
+            audioManager.SetMusicVolume(value); // ✅ Gọi hàm AudioManager để lưu
         }
     }
 
@@ -99,6 +99,7 @@ public class OptionsMenuController : MonoBehaviour
 
         UpdateButtonIcons();
     }
+
     void ToggleSFX()
     {
         if (audioManager == null) return;
@@ -109,17 +110,14 @@ public class OptionsMenuController : MonoBehaviour
         {
             lastSFXVolume = sfxSlider.value;
             sfxSlider.value = 0;
-            audioManager.sfxSource.volume = 0;
         }
         else
         {
             sfxSlider.value = lastSFXVolume;
-            audioManager.sfxSource.volume = lastSFXVolume;
         }
 
+        audioManager.SetSFXMute(sfxMuted); // ✅ Gọi hàm AudioManager để lưu
         UpdateButtonIcons();
-        PlayerPrefs.SetInt("SFX_Muted", sfxMuted ? 1 : 0);
-        PlayerPrefs.SetFloat("SFX_Volume", audioManager.sfxSource.volume);
     }
 
     void ToggleBGM()
@@ -132,17 +130,14 @@ public class OptionsMenuController : MonoBehaviour
         {
             lastBGMVolume = bgmSlider.value;
             bgmSlider.value = 0;
-            audioManager.musicSource.volume = 0;
         }
         else
         {
             bgmSlider.value = lastBGMVolume;
-            audioManager.musicSource.volume = lastBGMVolume;
         }
 
+        audioManager.SetMusicMute(bgmMuted); // ✅ Gọi hàm AudioManager để lưu
         UpdateButtonIcons();
-        PlayerPrefs.SetInt("BGM_Muted", bgmMuted ? 1 : 0);
-        PlayerPrefs.SetFloat("BGM_Volume", audioManager.musicSource.volume);
     }
 
     void UpdateButtonIcons()
@@ -156,6 +151,12 @@ public class OptionsMenuController : MonoBehaviour
 
     public void OnBackButtonPressed()
     {
+        // ✅ Phát SFX khi nhấn back
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_MenuBack();
+        }
+
         UIManager ui = FindAnyObjectByType<UIManager>();
         if (ui != null)
             ui.CloseSettings();

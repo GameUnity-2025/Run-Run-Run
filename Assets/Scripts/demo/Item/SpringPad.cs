@@ -18,6 +18,10 @@ public class SpringPad : MonoBehaviour
             Rigidbody2D rb = collision.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
+                if (AudioManager.Instance != null)  
+                {
+                    AudioManager.Instance.Play_Bounce(); 
+                }
                 // Bật Player lên
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
 
