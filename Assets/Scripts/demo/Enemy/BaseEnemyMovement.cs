@@ -9,6 +9,8 @@ public enum EnemySoundType
 
 public abstract class BaseEnemyMovement : MonoBehaviour
 {
+    public static bool GlobalMuteEnemies = true;
+
     [Header("Common Movement Settings")]
     [SerializeField] protected float speed = 2f;
     [SerializeField] protected float distance = 3f;
@@ -157,6 +159,27 @@ public abstract class BaseEnemyMovement : MonoBehaviour
 
     protected virtual void Update()
     {
+        Move();
+
+        // Nếu đang mute toàn cục => dừng phát âm thanh luôn
+        if (GlobalMuteEnemies)
+        {
+            if (isPlayingSound && enemyAudioSource != null)
+            {
+                enemyAudioSource.Stop();
+                isPlayingSound = false;
+            }
+            return; // Bỏ qua xử lý âm thanh
+        }
+
+        if (enableAutoLoopAudio)
+        {
+            CheckPlayerDistanceAndControlSound();
+        }
+    }
+
+    /*protected virtual void Update()
+    {
         Move(); // gọi hàm abstract mà class con sẽ cài đặt
         
         // Nếu auto loop bật, kiểm tra khoảng cách và điều khiển âm thanh
@@ -164,7 +187,7 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         {
             CheckPlayerDistanceAndControlSound();
         }
-    }
+    }*/
     
     /// <summary>
     /// Kiểm tra khoảng cách với player và phát/dừng âm thanh dựa trên khoảng cách
@@ -374,4 +397,5 @@ public abstract class BaseEnemyMovement : MonoBehaviour
         }
         return best;
     }
+
 }
