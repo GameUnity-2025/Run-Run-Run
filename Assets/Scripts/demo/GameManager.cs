@@ -46,14 +46,20 @@ public class GameManager : MonoBehaviour
         if (!isGameOver)
         {
             isGameOver = true;
+
+            // 🧊 Dừng thời gian toàn game
+            Time.timeScale = 0f;
+
             if (SoundManager.Instance != null && SoundManager.Instance.gameOverSound != null)
             {
                 SoundManager.Instance.PlaySFX(SoundManager.Instance.gameOverSound, SoundManager.Instance.defaultSFXVolume);
             }
+
             if (gameOverUi != null)
             {
                 gameOverUi.SetActive(true);
             }
+
             Debug.Log("Game Over! Final Score: " + score);
         }
     }
