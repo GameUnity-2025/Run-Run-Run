@@ -42,7 +42,7 @@ public class ShopItemUI : MonoBehaviour
         if (button)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => manager.ShowDetail(player));
+            //button.onClick.AddListener(() => manager.ShowDetail(player));
         }
 
         // ⚠️ KHÔNG reset RectTransform nếu prefab đang nằm trong LayoutGroup
