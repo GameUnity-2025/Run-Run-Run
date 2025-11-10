@@ -53,26 +53,30 @@ public class PlayerController : MonoBehaviour
         if (!canMove || gameManager.IsGameOver() || gameManager.IsGameWon())
         {
             rb.linearVelocity = Vector2.zero;
-            HandleFootstepSound(false); // Dừng âm thanh khi game over
+            HandleFootstepSound(false); // Dừng âm thanh khi không di chuyển/game over
             UpdateAnimation();
             return;
         }
 
-        // Di chuyển trái phải
-        float move = Input.GetAxis("Horizontal");
+        // Lấy input từ mobile trước, nếu nhỏ hơn ngưỡng thì dùng Input từ bàn phím
+        float move = Mathf.Abs(MobileInput.horizontal) > 0.01f
+                     ? MobileInput.horizontal
+                     : Input.GetAxis("Horizontal");
+
+        // Gán vận tốc
         rb.linearVelocity = new Vector2(move * moveSpeed, rb.linearVelocity.y);
 
-        // Kiểm tra vận tốc thực tế để phát âm thanh bước chân
-        // Chỉ phát khi nhân vật thực sự di chuyển trên mặt đất
+        // Kiểm tra di chuyển để bật âm bước chân
         bool isMoving = Mathf.Abs(rb.linearVelocity.x) > 0.1f && isGrounded;
         HandleFootstepSound(isMoving);
 
-        // ⚡ Quay đầu theo hướng di chuyển
+        // Quay đầu
         if (move > 0 && !facingRight)
             Flip();
         else if (move < 0 && facingRight)
             Flip();
 
+        // Xử lý nhảy
         HandleJump();
 
         // Rơi khỏi vực
@@ -81,8 +85,10 @@ public class PlayerController : MonoBehaviour
             TriggerGameOver();
         }
 
+        // Cập nhật animation
         UpdateAnimation();
     }
+
 
     // 🔄 Hàm quay đầu player
     private void Flip()
@@ -121,8 +127,9 @@ public class PlayerController : MonoBehaviour
     private void HandleJump()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        bool jumpPressed = MobileInput.ConsumeJump() || Input.GetButtonDown("Jump");
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (jumpPressed && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isGrounded = false;

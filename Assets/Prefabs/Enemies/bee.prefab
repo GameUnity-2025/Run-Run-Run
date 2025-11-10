@@ -79,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1913531815
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -7609784486296134634, guid: b1c60e17ccdecae42af2bd3ea908fd42, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -178,7 +178,7 @@ MonoBehaviour:
   enemySoundClip: {fileID: 8300000, guid: d3789e83886d08f45944ad2d7c18cfd5, type: 3}
   footstepInterval: 0.5
   useIndividualAudioSource: 1
-  soundVolume: 1
+  soundVolume: 0.266
   enableAutoLoopAudio: 1
   alwaysTrackClosestPlayer: 1
   minDistance: 1
@@ -187,4 +187,3 @@ MonoBehaviour:
   spatialBlend: 0.75
   playerTag: Player
   playerTransform: {fileID: 0}
-  moveSFX: {fileID: 0}
