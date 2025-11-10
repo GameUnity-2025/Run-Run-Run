@@ -74,7 +74,7 @@ MonoBehaviour:
   dontDestroyOnLoad: 0
   parentUnderSpawnPoint: 1
   applySortingOverrides: 1
-  sortingLayerName: Default
+  sortingLayerName: Player
   sortingOrder: 10
   forceDefaultLayer: 1
   retargetCinemachine: 1

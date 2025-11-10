@@ -12,6 +12,9 @@ public class SwipeController : MonoBehaviour
     [SerializeField] float tweenTime = 0.5f;
     [SerializeField] LeanTweenType tweenType;
 
+    [Header("Scene Names")]
+    [SerializeField] string menuSceneName = "MainMenu";
+
     bool isMoving = false; 
 
     private void Awake()
@@ -51,6 +54,41 @@ public class SwipeController : MonoBehaviour
             {
                 isMoving = false; 
             });
+    }
+
+    public void BackToMenu()
+    {
+        if (isMoving) return;
+
+        // Try multiple possible scene names
+        string[] possibleNames = { menuSceneName, "MainMenu", "Main Menu", "Menu" };
+
+        foreach (string name in possibleNames)
+        {
+            if (SceneExists(name))
+            {
+                Debug.Log($"Loading menu scene: {name}");
+                SceneManager.LoadScene(name);
+                return;
+            }
+        }
+
+        // If no scene found, try loading by index (usually scene 0 is main menu)
+        Debug.LogWarning("Menu scene not found by name, trying to load scene 0");
+        SceneManager.LoadScene(0);
+    }
+
+    private bool SceneExists(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneNameInBuild = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+
+            if (sceneNameInBuild == sceneName)
+                return true;
+        }
+        return false;
     }
 
     public void PlayCurrentLevel()

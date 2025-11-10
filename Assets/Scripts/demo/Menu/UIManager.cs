@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement; // 🟢 cần để load scene Home
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Panels")]
-    [SerializeField] private GameObject settingsPanel;   // OptionsPanel prefab instance
-    [SerializeField] private GameObject pausePanel;      // Panel tạm dừng
-    [SerializeField] private GameObject backgroundDim;   // lớp nền mờ toàn màn hình
+    [SerializeField] private GameObject settingsPanel;   // Settings panel prefab
+    [SerializeField] private GameObject pausePanel;      // Pause menu
+    [SerializeField] private GameObject backgroundDim;   // Màn nền mờ
 
     [Header("Audio")]
     [SerializeField] private AudioMixer masterMixer;
@@ -30,11 +30,11 @@ public class UIManager : MonoBehaviour
             pausePanel.SetActive(false);
 
         if (backgroundDim)
-            backgroundDim.SetActive(false); // ẩn lớp mờ khi khởi động
+            backgroundDim.SetActive(false);
     }
 
     // ======================================================
-    // 🟢 SETTINGS
+    // ⚙ SETTINGS
     // ======================================================
     public void ToggleSettings()
     {
@@ -44,9 +44,8 @@ public class UIManager : MonoBehaviour
 
     public void OpenSettings()
     {
-        if (settingsPanel == null) return;
+        if (isPaused || settingsPanel == null) return;
 
-        // bật panel + lớp nền mờ
         settingsPanel.SetActive(true);
         if (backgroundDim != null)
             backgroundDim.SetActive(true);
@@ -54,7 +53,10 @@ public class UIManager : MonoBehaviour
         isSettingsOpen = true;
         PauseEverything();
 
-        // cập nhật volume cho slider
+        // ✅ đảm bảo OnEnable của OptionsMenuController chạy xong trước khi cập nhật volume
+        if (optionsController == null)
+            optionsController = settingsPanel.GetComponent<OptionsMenuController>();
+
         if (optionsController != null && AudioManager.Instance != null)
         {
             var am = AudioManager.Instance;
@@ -66,7 +68,6 @@ public class UIManager : MonoBehaviour
     {
         if (settingsPanel == null) return;
 
-        // tắt panel + lớp nền mờ
         settingsPanel.SetActive(false);
         if (backgroundDim != null)
             backgroundDim.SetActive(false);
@@ -76,7 +77,7 @@ public class UIManager : MonoBehaviour
     }
 
     // ======================================================
-    // 🟣 PAUSE MENU
+    // ⏸ PAUSE MENU
     // ======================================================
     public void TogglePause()
     {
@@ -86,7 +87,7 @@ public class UIManager : MonoBehaviour
 
     public void PauseGame()
     {
-        if (pausePanel == null) return;
+        if (isSettingsOpen || pausePanel == null) return;
 
         pausePanel.SetActive(true);
         if (backgroundDim != null)
@@ -112,14 +113,13 @@ public class UIManager : MonoBehaviour
 
     public void GoHome()
     {
-        // resume time trước khi load scene mới
         Time.timeScale = 1f;
         AudioListener.pause = false;
-        SceneManager.LoadScene("Menu"); // 🏠 tên scene chính
+        SceneManager.LoadScene("Menu");
     }
 
     // ======================================================
-    // 🎚 AUDIO
+    // 🔊 AUDIO
     // ======================================================
     public void SetMasterVolume(float volume)
     {
@@ -131,7 +131,7 @@ public class UIManager : MonoBehaviour
     }
 
     // ======================================================
-    // ⏯ HỖ TRỢ DỪNG / TIẾP TỤC
+    // ⏯ SUPPORT
     // ======================================================
     private void PauseEverything()
     {
