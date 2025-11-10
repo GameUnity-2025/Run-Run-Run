@@ -16,6 +16,12 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void GotoSettings()
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.Play_Button();
+    }
+
     public void GotoShop()
     {
         SceneManager.LoadScene("Shop");

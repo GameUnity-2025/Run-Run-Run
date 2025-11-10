@@ -72,6 +72,9 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
             if (GameWinUi != null)
             {
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.Play_Success();
+
                 GameWinUi.SetActive(true);
             }
             Debug.Log("You Win! Final Score: " + score);

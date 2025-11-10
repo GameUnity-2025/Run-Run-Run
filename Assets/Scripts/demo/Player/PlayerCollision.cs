@@ -14,30 +14,45 @@ public class PlayerCollision : MonoBehaviour
             Destroy(collision.gameObject);
 			gameManager.AddScore(1);
 			GemsManager.AddGems(1);
-            
+
             // Phát âm thanh ăn gem
-            PlayGemCollectSound();
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Coin();
         }
         else if (collision.CompareTag("Trap"))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Fail();
             gameManager.GameOver();
         }
         else if (collision.CompareTag("Enemy"))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Fail();
+
             gameManager.GameOver();
         }
         // Die on touching ForeGround layer (no tag required)
         else if (collision.gameObject.layer == LayerMask.NameToLayer("ForeGround"))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Fail();
+
             gameManager.GameOver();
         }
         else if (collision.CompareTag("Goal"))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Success();
+
             gameManager.GameWin();
         }
         // Kiểm tra rơi xuống nước (kiểm tra layer "Water")
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Fail();
+
             PlayWaterSplashSound();
             gameManager.GameOver();
         }

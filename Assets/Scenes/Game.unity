@@ -1470,6 +1470,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6083025351608830116, guid: d65d3fbabf74ae44189684f1af559857, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 8593043390114608223, guid: d65d3fbabf74ae44189684f1af559857, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1870,7 +1874,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.9335673, y: 0.9520978, z: -10}
+  m_LocalPosition: {x: 2.9967687, y: 0.9520978, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27858,6 +27862,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
+  - {fileID: 380170902}
   - {fileID: 2074353823}
   - {fileID: 1759460228}
   - {fileID: 619394802}
@@ -27874,5 +27879,4 @@ SceneRoots:
   - {fileID: 255759490}
   - {fileID: 1058419391}
   - {fileID: 1067068996}
-  - {fileID: 380170902}
   - {fileID: 1766854207}

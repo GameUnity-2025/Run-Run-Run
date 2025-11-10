@@ -25,6 +25,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip coin;
     public AudioClip jump;
 
+    // ✅ Biến private để lưu trạng thái
     private float sfxVolume = 1f;
     private float musicVolume = 1f;
     private bool sfxMuted = false;
@@ -36,7 +37,7 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            LoadSettings();
+            LoadSettings(); // ✅ Load settings ngay khi khởi động
         }
         else
         {
@@ -96,7 +97,7 @@ public class AudioManager : MonoBehaviour
         {
             musicSource.clip = clip;
             musicSource.loop = true;
-            musicSource.volume = musicMuted ? 0 : musicVolume;
+            musicSource.volume = musicMuted ? 0 : musicVolume; // ✅ Áp dụng volume đã lưu
             musicSource.Play();
         }
     }
@@ -107,7 +108,7 @@ public class AudioManager : MonoBehaviour
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
-        sfxSource.volume = sfxMuted ? 0 : sfxVolume;
+        sfxSource.volume = sfxMuted ? 0 : sfxVolume; // ✅ Áp dụng volume đã lưu
         sfxSource.PlayOneShot(clip);
     }
 
@@ -117,6 +118,7 @@ public class AudioManager : MonoBehaviour
         sfxVolume = Mathf.Clamp01(volume);
         sfxSource.volume = sfxMuted ? 0 : sfxVolume;
         PlayerPrefs.SetFloat("SFX_Volume", sfxVolume);
+        PlayerPrefs.Save(); // ✅ Lưu ngay
     }
 
     public void SetMusicVolume(float volume)
@@ -124,6 +126,7 @@ public class AudioManager : MonoBehaviour
         musicVolume = Mathf.Clamp01(volume);
         musicSource.volume = musicMuted ? 0 : musicVolume;
         PlayerPrefs.SetFloat("BGM_Volume", musicVolume);
+        PlayerPrefs.Save(); // ✅ Lưu ngay
     }
 
     public void SetSFXMute(bool mute)
@@ -131,6 +134,7 @@ public class AudioManager : MonoBehaviour
         sfxMuted = mute;
         sfxSource.volume = mute ? 0 : sfxVolume;
         PlayerPrefs.SetInt("SFX_Muted", mute ? 1 : 0);
+        PlayerPrefs.Save(); // ✅ Lưu ngay
     }
 
     public void SetMusicMute(bool mute)
@@ -138,8 +142,10 @@ public class AudioManager : MonoBehaviour
         musicMuted = mute;
         musicSource.volume = mute ? 0 : musicVolume;
         PlayerPrefs.SetInt("BGM_Muted", mute ? 1 : 0);
+        PlayerPrefs.Save(); // ✅ Lưu ngay
     }
 
+    // ✅ Load settings từ PlayerPrefs
     private void LoadSettings()
     {
         sfxVolume = PlayerPrefs.GetFloat("SFX_Volume", 1f);
@@ -149,7 +155,15 @@ public class AudioManager : MonoBehaviour
 
         sfxSource.volume = sfxMuted ? 0 : sfxVolume;
         musicSource.volume = musicMuted ? 0 : musicVolume;
+
+        Debug.Log($"✅ Loaded Settings - SFX: {sfxVolume} (Muted: {sfxMuted}), BGM: {musicVolume} (Muted: {musicMuted})");
     }
+
+    // ✅ Getter để OptionsMenuController lấy giá trị
+    public float GetSFXVolume() => sfxVolume;
+    public float GetMusicVolume() => musicVolume;
+    public bool IsSFXMuted() => sfxMuted;
+    public bool IsMusicMuted() => musicMuted;
 
     // ====== Convenience ======
     public void Play_Button() => PlaySFX(button);

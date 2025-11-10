@@ -28,6 +28,11 @@ public class SwipeController : MonoBehaviour
         if (isMoving) return; 
         if (currentPage < maxPage)
         {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.Play_Button();
+            }
+
             currentPage++;
             targetPos = levelPagesRect.localPosition - pageStep;
             MovePage();
@@ -39,6 +44,11 @@ public class SwipeController : MonoBehaviour
         if (isMoving) return; 
         if (currentPage > 1)
         {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.Play_Button();
+            }
+
             currentPage--;
             targetPos = levelPagesRect.localPosition + pageStep;
             MovePage();

@@ -102,6 +102,11 @@ public class PlayerController : MonoBehaviour
     // Gọi GameOver một cách an toàn
     private void TriggerGameOver()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Fail();
+        }
+        
         canMove = false;
         rb.linearVelocity = Vector2.zero;
         gameManager.GameOver();
@@ -133,9 +138,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isGrounded = false;
-            
-            // Phát âm thanh nhảy
-            PlayJumpSound();
+
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.Play_Jump();
+            }
         }
     }
 

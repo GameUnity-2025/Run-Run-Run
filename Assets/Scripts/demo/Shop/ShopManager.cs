@@ -92,6 +92,9 @@ public class ShopManager : MonoBehaviour
         if (player == null) return;
         currentViewingPlayer = player;
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.Play_Button();
+
         if (!detailPanel) return;
         detailPanel.SetActive(true);
 
@@ -172,6 +175,9 @@ public class ShopManager : MonoBehaviour
 
         if (GemsManager.SpendGems(currentViewingPlayer.price))
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.Play_Purchase();
+
             Unlock(currentViewingPlayer);
             RefreshGemsUI();
             LoadShop();
@@ -261,6 +267,9 @@ public class ShopManager : MonoBehaviour
 
     public void CloseDetailPanel()
     {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.Play_MenuBack();
+
         if (detailPanel)
             detailPanel.SetActive(false);
     }

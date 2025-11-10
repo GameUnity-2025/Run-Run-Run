@@ -38,6 +38,11 @@ public class UIManager : MonoBehaviour
     // ======================================================
     public void ToggleSettings()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
+
         if (isSettingsOpen) CloseSettings();
         else OpenSettings();
     }
@@ -45,6 +50,11 @@ public class UIManager : MonoBehaviour
     public void OpenSettings()
     {
         if (isPaused || settingsPanel == null) return;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
 
         settingsPanel.SetActive(true);
         if (backgroundDim != null)
@@ -68,6 +78,11 @@ public class UIManager : MonoBehaviour
     {
         if (settingsPanel == null) return;
 
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
+
         settingsPanel.SetActive(false);
         if (backgroundDim != null)
             backgroundDim.SetActive(false);
@@ -81,6 +96,11 @@ public class UIManager : MonoBehaviour
     // ======================================================
     public void TogglePause()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
+
         if (isPaused) ResumeGame();
         else PauseGame();
     }
@@ -88,6 +108,11 @@ public class UIManager : MonoBehaviour
     public void PauseGame()
     {
         if (isSettingsOpen || pausePanel == null) return;
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
 
         pausePanel.SetActive(true);
         if (backgroundDim != null)
@@ -102,6 +127,11 @@ public class UIManager : MonoBehaviour
     {
         if (pausePanel == null) return;
 
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
+
         pausePanel.SetActive(false);
         if (backgroundDim != null)
             backgroundDim.SetActive(false);
@@ -113,6 +143,11 @@ public class UIManager : MonoBehaviour
 
     public void GoHome()
     {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.Play_Button();
+        }
+
         Time.timeScale = 1f;
         AudioListener.pause = false;
         SceneManager.LoadScene("Menu");
