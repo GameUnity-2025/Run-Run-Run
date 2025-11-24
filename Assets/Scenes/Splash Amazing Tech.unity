@@ -204,8 +204,8 @@ Transform:
   m_GameObject: {fileID: 1606561111}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0086, y: -0.0079, z: 0}
-  m_LocalScale: {x: 0.17795077, y: 0.21877587, z: 1}
+  m_LocalPosition: {x: -0.0251, y: 0.0086, z: 0}
+  m_LocalScale: {x: 0.23992059, y: 0.21947597, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -222,9 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb23471a1f0d2b64e8545ee972a6eb90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SplashFade
-  canvasGroup: {fileID: 0}
-  fadeDuration: 1
-  waitTime: 2
+  delayTime: 2.5
 --- !u!1 &2069504858
 GameObject:
   m_ObjectHideFlags: 0
