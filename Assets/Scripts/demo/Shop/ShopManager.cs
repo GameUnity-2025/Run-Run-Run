@@ -142,7 +142,7 @@ public class ShopManager : MonoBehaviour
                 detailBuyButton.gameObject.SetActive(true);
                 int gems = GemsManager.GetGems();
                 detailBuyButton.interactable = gems >= currentViewingPlayer.price;
-                buyButtonText.text = detailBuyButton.interactable ? "Purchase" : "Not Enough Gems";
+                buyButtonText.text = detailBuyButton.interactable ? "Purchase" : "Not Enough";
             }
         }
 
