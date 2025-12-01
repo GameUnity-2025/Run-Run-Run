@@ -11,7 +11,7 @@ public class EnemyVertical : MonoBehaviour
 
     [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;     // Điểm kiểm tra chạm đất
-    [SerializeField] private float groundRadius = 0.2f; // Bán kính kiểm tra
+    [SerializeField] private float groundRadius = 0.3f; // Bán kính kiểm tra
     [SerializeField] private LayerMask groundLayer;     // Layer mặt đất
 
     [Header("Animation")]

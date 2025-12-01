@@ -50460,7 +50460,7 @@ PrefabInstance:
       objectReference: {fileID: 1110211086}
     - target: {fileID: 5755201969700099653, guid: b7da8cbf0fc761e4086bfd487f54a163, type: 3}
       propertyPath: m_SortingOrder
-      value: -1
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 5755201969700099653, guid: b7da8cbf0fc761e4086bfd487f54a163, type: 3}
       propertyPath: m_SortingLayerID
@@ -61845,6 +61845,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1110211086}
+    - target: {fileID: 524868100820956491, guid: d65d3fbabf74ae44189684f1af559857, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 1192818060545602765, guid: d65d3fbabf74ae44189684f1af559857, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
